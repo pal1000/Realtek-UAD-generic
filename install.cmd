@@ -36,6 +36,8 @@ if '%errorlevel%' NEQ '0' (
 @net stop RtkAudioUniversalService
 @sc delete RtkAudioUniversalService
 @echo.
+@SchTasks /Create /SC ONLOGON /TN "RealtekUADSetup" /TR %0
+@echo.
 @echo Attention! You will now be logged out. Save your work before continuing.
 @pause
 @shutdown -l
@@ -85,6 +87,8 @@ if '%errorlevel%' NEQ '0' (
 @devcon /rescan
 @echo.
 @pause
+@SchTasks /Delete /TN "RealtekUADSetup" /f
+@echo.
 
 :checkreboot
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2> nul
