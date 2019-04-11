@@ -36,8 +36,9 @@ if '%errorlevel%' NEQ '0' (
 @net stop RtkAudioUniversalService
 @sc delete RtkAudioUniversalService
 @echo.
-@SchTasks /Create /SC ONLOGON /TN "RealtekUADSetup" /TR %0
+@echo @call %0 >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @echo.
+
 @echo Attention! You will now be logged out. Save your work before continuing.
 @pause
 @shutdown -l
@@ -45,7 +46,9 @@ if '%errorlevel%' NEQ '0' (
 
 :uninstall
 @devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
+@devcon /r disable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
 @devcon /r remove =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
+@devcon /r remove =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
 @setlocal ENABLEDELAYEDEXPANSION
 @set core=0
 @set ext=0
@@ -87,7 +90,7 @@ if '%errorlevel%' NEQ '0' (
 @devcon /rescan
 @echo.
 @pause
-@SchTasks /Delete /TN "RealtekUADSetup" /f
+@del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @echo.
 
 :checkreboot
