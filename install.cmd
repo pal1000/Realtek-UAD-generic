@@ -38,7 +38,6 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 @echo @call %0 >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @echo.
-
 @echo Attention! You will now be logged out. Save your work before continuing.
 @pause
 @shutdown -l
@@ -56,9 +55,9 @@ if '%errorlevel%' NEQ '0' (
 @set hsa=0
 @set apo=0
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==hdxrt.inf set core=!drvcount!
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==hdxrt.inf set core=!drvcount!&IF !y!==HDXRTSST.inf set core=!drvcount!
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==hdx_genericext_rtk.inf set ext=!drvcount!
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==hdx_genericext_rtk.inf set ext=!drvcount!&IF !y!==GenericAudioExtRT.inf set ext=!drvcount!
 @set drvcount=0
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==realtekservice.inf set service=!drvcount!
 @set drvcount=0
@@ -97,6 +96,6 @@ if '%errorlevel%' NEQ '0' (
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2> nul
 @IF ERRORLEVEL 1 exit
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
-@echo
+@echo.
 @pause
 @shutdown -r -t 0
