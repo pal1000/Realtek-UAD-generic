@@ -44,10 +44,17 @@ if '%errorlevel%' NEQ '0' (
 @exit
 
 :uninstall
+@set ERRORLEVEL=0
+@where /q devcon
+@IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&pause&exit
 @devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
+@echo.
 @devcon /r disable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
+@echo.
 @devcon /r remove =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
+@echo.
 @devcon /r remove =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
+@echo.
 @setlocal ENABLEDELAYEDEXPANSION
 @set core=0
 @set ext=0
@@ -67,12 +74,16 @@ if '%errorlevel%' NEQ '0' (
 @set drvcount=0
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" set /a drvcount+=1&IF !drvcount!==%service% set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot
 @set drvcount=0
+@echo.
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" set /a drvcount+=1&IF !drvcount!==%hsa% set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot
 @set drvcount=0
+@echo.
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" set /a drvcount+=1&IF !drvcount!==%apo% set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot
 @set drvcount=0
+@echo.
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" set /a drvcount+=1&IF !drvcount!==%core% set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot
 @set drvcount=0
+@echo.
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" set /a drvcount+=1&IF !drvcount!==%ext% set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot
 @endlocal
 @echo.
@@ -93,6 +104,7 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 
 :checkreboot
+@set ERRORLEVEL=0
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2> nul
 @IF ERRORLEVEL 1 exit
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
