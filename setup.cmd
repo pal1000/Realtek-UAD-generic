@@ -96,12 +96,15 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 @echo Done installing driver
 @echo.
-@del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
-@echo We'll open Device Manager. Please do scan for hardware changes to start Realtek UAD Audio driver then close Device Manger when done.
+@pause
+@devcon /rescan
+@echo.
+@echo Give Windows to 10 seconds to load Realtek UAD driver...
+@ping -n 10 127.0.0.1 >nul
 @echo.
 @pause
+@del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @echo.
-@%windir%\system32\mmc.exe %windir%\system32\devmgmt.msc
 
 :checkreboot
 @set ERRORLEVEL=0
