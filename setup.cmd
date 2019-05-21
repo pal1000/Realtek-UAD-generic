@@ -30,7 +30,7 @@ if '%errorlevel%' NEQ '0' (
 :--------------------------------------
 @TITLE Update Realtek UAD driver
 @SET ERRORLEVEL=0
-@REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService 2>&1 nul
+@REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService > nul 2>&1
 @IF ERRORLEVEL 1 GOTO uninstall
 @REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f
 @net stop RtkAudioUniversalService
@@ -108,7 +108,7 @@ if '%errorlevel%' NEQ '0' (
 
 :checkreboot
 @set ERRORLEVEL=0
-@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2>&1 nul
+@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations > nul 2>&1
 @IF ERRORLEVEL 1 exit
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
