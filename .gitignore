@@ -1,0 +1,8 @@
+# Devcon tool
+devcon.exe
+# Driver folders
+/Codec*/
+/ExtRtk/
+/RealtekAPO*/
+/RealtekHSA*/
+/RealtekService*/
