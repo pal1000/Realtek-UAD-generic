@@ -1,5 +1,7 @@
 # Devcon tool
 devcon.exe
+# Driver Package installer
+dpinst.exe
 # Driver folders
 /Codec*/
 /ExtRtk*/
