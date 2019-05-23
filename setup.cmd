@@ -92,16 +92,11 @@ if '%errorlevel%' NEQ '0' (
 @pause
 
 :install
-@set legacyinstall=n
-@IF EXIST dpinst.exe echo.
-@IF EXIST dpinst.exe set /p legacyinstall=Use legacy GUI installer (y/n):
-@IF EXIST dpinst.exe echo.
-@IF /I NOT "%legacyinstall%"=="y" pnputil /add-driver *.inf /subdirs /reboot
-@IF /I NOT "%legacyinstall%"=="y" echo.
-@IF /I "%legacyinstall%"=="y" dpinst
-@IF /I NOT "%legacyinstall%"=="y" echo Done installing driver
-@IF /I NOT "%legacyinstall%"=="y" echo.
-@IF /I NOT "%legacyinstall%"=="y" pause
+@pnputil /add-driver *.inf /subdirs /reboot
+@echo.
+@echo Done installing driver
+@echo.
+@pause
 @devcon /rescan
 @echo.
 @echo Give Windows to 10 seconds to load Realtek UAD driver...
