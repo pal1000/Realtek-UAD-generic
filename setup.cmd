@@ -99,8 +99,8 @@ if '%errorlevel%' NEQ '0' (
 @pause
 @devcon /rescan
 @echo.
-@echo Give Windows to 10 seconds to load Realtek UAD driver...
-@ping -n 10 127.0.0.1 >nul
+@echo Give Windows 20 seconds to load Realtek UAD driver...
+@ping -n 20 127.0.0.1 >nul
 @echo.
 @pause
 @del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
