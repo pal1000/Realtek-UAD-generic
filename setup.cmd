@@ -90,19 +90,26 @@ if '%errorlevel%' NEQ '0' (
 @echo Done uninstalling driver
 @echo.
 @pause
+@echo.
 
 :install
+@set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
+@echo.
+@IF /I NOT "%install%"=="y" GOTO clearstartupentry
 @pnputil /add-driver *.inf /subdirs /reboot
 @echo.
 @echo Done installing driver
 @echo.
 @pause
+@echo.
 @devcon /rescan
 @echo.
 @echo Give Windows 20 seconds to load Realtek UAD driver...
 @ping -n 20 127.0.0.1 >nul
 @echo.
 @pause
+
+:clearstartupentry
 @del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @echo.
 
