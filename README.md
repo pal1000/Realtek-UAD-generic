@@ -9,6 +9,6 @@ I have an old system that is not supported by OEM specific Realtek UAD drivers a
 - Download latest `{version}-UAD-Nahimic*.zip` or  `{version}-UAD-WHQL-Nahimic*.zip` whichever is the newer version from `ftp://spcust@ftp3.realtek.com/Realtek`;
 - Extract `RTKVHD64.sys`,`RTAIODAT.DAT`,`HDXRT.inf` and `hdxrt.cat` to codec folder;
 - Extract `hdxrtext.cat` from ExtRtk folder to codec folder;
-- Save [HDX_GenericExt_RTK.inf](https://github.com/alanfox2000/realtek-universal-audio-driver/raw/master/UAD/Realtek/ExtRtk_8716.1_DUA/HDX_GenericExt_RTK.inf) to Codec folder;
+- Save [HDX_GenericExt_RTK.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8716.1/HDX_GenericExt_RTK.inf) to Codec folder;
 - Replace `DriverVer` value from `HDX_GenericExt_RTK.inf` with the one copied from `HDXRT.inf`;
 - Extract RealtekAPO, RealtekHSA and RealtekService folders from Nahimic package.
