@@ -6,5 +6,6 @@ devcon.exe
 /RealtekAPO*/
 /RealtekHSA*/
 /RealtekService*/
+/driver/
 # Realtek Audio Control offline bundle
 /*RtkUWP*/

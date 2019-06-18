@@ -103,7 +103,9 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 
 :rescan
-@echo 1>"%~dp0bluescreen.ini"
+@for /F "tokens=2" %%a in ('date /t') do @echo A BSOD occured during the installation of Realtek UAD package. To recover your system stability you must perform a system restore to a moment before %a:%time% using Windows recovery menu.>"%~dp0bsod-recovery.txt"
+@rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
+@ping -n 4 127.0.0.1 >nul
 @devcon /rescan
 @echo.
 @echo Give Windows 20 seconds to load Realtek UAD driver...
@@ -111,7 +113,7 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 @pause
 @echo.
-@del "%~dp0bluescreen.ini"
+@del "%~dp0bsod-recovery.txt"
 
 :checkreboot
 @set ERRORLEVEL=0
