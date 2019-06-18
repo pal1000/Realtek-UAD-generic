@@ -103,7 +103,10 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 
 :rescan
-@for /F "tokens=2" %%a in ('date /t') do @echo A BSOD occured during the installation of Realtek UAD package. To recover your system stability you must perform a system restore to a moment before %a:%time% using Windows recovery menu.>"%~dp0bsod-recovery.txt"
+@for /F "tokens=2" %%a in ('date /t') do @set currdate=%%a
+@echo A BSOD occured during the installation of Realtek UAD package.>"%~dp0bsod-recovery.txt"
+@echo To recover your system stability you must perform a system restore to a moment before %currdate%:%time%>>"%~dp0bsod-recovery.txt"
+@echo using Windows recovery menu.>>"%~dp0bsod-recovery.txt"
 @rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
 @ping -n 4 127.0.0.1 >nul
 @devcon /rescan

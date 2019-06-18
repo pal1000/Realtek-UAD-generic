@@ -9,3 +9,5 @@ devcon.exe
 /driver/
 # Realtek Audio Control offline bundle
 /*RtkUWP*/
+# BSOD recovery tutorial
+bsod-recovery.txt
