@@ -93,23 +93,25 @@ if '%errorlevel%' NEQ '0' (
 :install
 @set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
 @echo.
-@IF /I NOT "%install%"=="y" GOTO clearstartupentry
-@pnputil /add-driver *.inf /subdirs /reboot
-@echo.
+@IF /I "%install%"=="y" pnputil /add-driver *.inf /subdirs /reboot
+@IF /I "%install%"=="y" echo.
+@del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+@IF /I NOT "%install%"=="y" GOTO ending
 @echo Done installing driver
 @echo.
 @pause
 @echo.
+
+:rescan
+@echo 1>"%~dp0bluescreen.ini"
 @devcon /rescan
 @echo.
 @echo Give Windows 20 seconds to load Realtek UAD driver...
 @ping -n 20 127.0.0.1 >nul
 @echo.
 @pause
-
-:clearstartupentry
-@del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @echo.
+@del "%~dp0bluescreen.ini"
 
 :checkreboot
 @set ERRORLEVEL=0
@@ -119,3 +121,5 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 @pause
 @shutdown -r -t 0
+
+:ending
