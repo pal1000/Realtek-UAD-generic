@@ -104,8 +104,12 @@ if '%errorlevel%' NEQ '0' (
 
 :start-driver
 @for /F "tokens=2" %%a in ('date /t') do @set currdate=%%a
-@echo A BSOD or GSOD occured during the installation of Realtek UAD package.>"%~dp0recovery.txt"
-@echo To recover your system stability you must perform a system restore to a moment before %currdate%:%time%>>"%~dp0recovery.txt"
+@(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
+echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
+echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
+echo is then disabled if installation completes sucessfully. An utility that disables advanced startup menu on demand is included.
+echo.
+echo A Realtek UAD generic driver initialization failure leading to Windows crash occurred at %currdate%:%time%)>"%~dp0recovery.txt"
 @echo using Windows startup recovery menu. That's why we configured windows to start in this mode automatically.>>"%~dp0recovery.txt"
 @echo To revert it run utility\restorewindowsnormalstartup.cmd.>>"%~dp0recovery.txt"
 @echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
@@ -120,7 +124,10 @@ if '%errorlevel%' NEQ '0' (
 @pause
 @echo.
 @rem If we got here then everything is OK.
-@del "%~dp0recovery.txt"
+@(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
+echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
+echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
+echo is then disabled if installation completes sucessfully. An utility that disables advanced startup menu on demand is included.)>"%~dp0recovery.txt"
 @echo Reverting Windows to normal startup...
 @bcdedit /set {globalsettings} advancedoptions false
 @pause
