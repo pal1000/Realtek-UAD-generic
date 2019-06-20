@@ -106,8 +106,8 @@ if '%errorlevel%' NEQ '0' (
 @for /F "tokens=2" %%a in ('date /t') do @set currdate=%%a
 @echo A BSOD or GSOD occured during the installation of Realtek UAD package.>"%~dp0recovery.txt"
 @echo To recover your system stability you must perform a system restore to a moment before %currdate%:%time%>>"%~dp0recovery.txt"
-@echo using Windows recovery menu. That's why we configured windows to start in this mode automatically.>>"%~dp0recovery.txt"
-@echo To revert it run utilities\restorewindowsnormalstartup.cmd.>>"%~dp0recovery.txt"
+@echo using Windows startup recovery menu. That's why we configured windows to start in this mode automatically.>>"%~dp0recovery.txt"
+@echo To revert it run utility\restorewindowsnormalstartup.cmd.>>"%~dp0recovery.txt"
 @echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
