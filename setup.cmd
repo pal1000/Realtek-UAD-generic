@@ -102,21 +102,29 @@ if '%errorlevel%' NEQ '0' (
 @pause
 @echo.
 
-:rescan
+:start-driver
 @for /F "tokens=2" %%a in ('date /t') do @set currdate=%%a
-@echo A BSOD occured during the installation of Realtek UAD package.>"%~dp0bsod-recovery.txt"
-@echo To recover your system stability you must perform a system restore to a moment before %currdate%:%time%>>"%~dp0bsod-recovery.txt"
-@echo using Windows recovery menu.>>"%~dp0bsod-recovery.txt"
+@echo A BSOD or GSOD occured during the installation of Realtek UAD package.>"%~dp0recovery.txt"
+@echo To recover your system stability you must perform a system restore to a moment before %currdate%:%time%>>"%~dp0recovery.txt"
+@echo using Windows recovery menu. That's why we configured windows to start in this mode automatically.>>"%~dp0recovery.txt"
+@echo To revert it run utilities\restorewindowsnormalstartup.cmd.>>"%~dp0recovery.txt"
+@echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
+@bcdedit /set {globalsettings} advancedoptions true
+@echo.
 @rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
 @ping -n 4 127.0.0.1 >nul
 @devcon /rescan
 @echo.
 @echo Give Windows 20 seconds to load Realtek UAD driver...
 @ping -n 20 127.0.0.1 >nul
-@echo.
 @pause
 @echo.
-@del "%~dp0bsod-recovery.txt"
+@rem If we got here then everything is OK.
+@del "%~dp0recovery.txt"
+@echo Reverting Windows to normal startup...
+@bcdedit /set {globalsettings} advancedoptions false
+@pause
+@echo.
 
 :checkreboot
 @set ERRORLEVEL=0

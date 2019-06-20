@@ -6,8 +6,8 @@ devcon.exe
 /RealtekAPO*/
 /RealtekHSA*/
 /RealtekService*/
-/driver/
+/Win64/
 # Realtek Audio Control offline bundle
 /*RtkUWP*/
-# BSOD recovery tutorial
-bsod-recovery.txt
+# BSOD / GSOD recovery tutorial
+recovery.txt
