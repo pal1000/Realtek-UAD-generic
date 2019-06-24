@@ -12,3 +12,5 @@ I have an old system that is not supported by OEM specific Realtek UAD drivers a
 - Save [HDX_GenericExt_RTK.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8716.1/HDX_GenericExt_RTK.inf) to Codec folder;
 - Replace `DriverVer` value from `HDX_GenericExt_RTK.inf` with the one copied from `HDXRT.inf`;
 - Extract RealtekAPO, RealtekHSA and RealtekService folders from Nahimic package.
+### Official installer
+The MSI Nahimic package that this mod is most of time based off contains the official Realtek UAD installer. If you prefer it over my custom made open-source installer, move Win64 folder inside Official-Setup folder and run setup.exe as admin from there.

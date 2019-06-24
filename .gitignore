@@ -1,12 +1,18 @@
-# Devcon tool
-devcon.exe
+# Devcon tool and official setup
+*.exe
+*.ini
+*.dll
+*.cab
+*.iss
+*.hdr
+*.bin
+*.inx
+*.isn
 # Driver folders
-/Codec*/
-/ExtRtk*/
-/RealtekAPO*/
-/RealtekHSA*/
-/RealtekService*/
-/Win64/
+*.inf
+*.cat
+*.DAT
+*.sys
 # Realtek Audio Control offline bundle
 /*RtkUWP*/
 # BSOD / GSOD recovery tutorial
