@@ -28,17 +28,23 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 :--------------------------------------
-@TITLE Update Realtek UAD driver
+@TITLE Update Realtek UAD generic driver
 @SET ERRORLEVEL=0
 @REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService > nul 2>&1
-@IF ERRORLEVEL 1 GOTO uninstall
-@REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f
-@net stop RtkAudioUniversalService
-@sc delete RtkAudioUniversalService
-@echo.
+@IF ERRORLEVEL 1 GOTO checkservice
+@echo Removing Realtek Universal Audio Service registration record...
+@REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
+@net stop RtkAudioUniversalService > nul 2>&1
+@sc delete RtkAudioUniversalService > nul 2>&1
+@echo Done.
 @echo @call %0 >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @echo.
-@echo Attention! You will now be logged out. Save your work before continuing.
+
+:checkservice
+@set runningservice=0
+@for /f "USEBACKQ" %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe"`) do @set /a runningservice+=1 > nul
+@IF %runningservice% GTR 1 echo Attention! Active instances of Realtek Universal Audio Service are still running.
+@IF %runningservice% GTR 1 echo For them to terminate all users have to log out so save your work.
 @pause
 @shutdown -l
 @exit
@@ -130,13 +136,12 @@ echo so that entering Safe mode to access system restore is much easier, avoidin
 echo is then disabled if installation completes sucessfully. An utility that disables advanced startup menu on demand is included.)>"%~dp0recovery.txt"
 @echo Reverting Windows to normal startup...
 @bcdedit /set {globalsettings} advancedoptions false
-@pause
 @echo.
 
 :checkreboot
 @set ERRORLEVEL=0
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations > nul 2>&1
-@IF ERRORLEVEL 1 exit
+@IF ERRORLEVEL 1 pause&exit
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
 @pause
