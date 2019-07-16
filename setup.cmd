@@ -45,14 +45,16 @@ if '%errorlevel%' NEQ '0' (
 @for /f "USEBACKQ" %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe"`) do @set /a runningservice+=1 > nul
 @IF %runningservice% GTR 1 echo Attention! Active instances of Realtek Universal Audio Service are still running.
 @IF %runningservice% GTR 1 echo For them to terminate all users have to log out so save your work.
-@pause
-@shutdown -l
-@exit
+@IF %runningservice% GTR 1 pause
+@IF %runningservice% GTR 1 shutdown -l
+@IF %runningservice% GTR 1 exit
 
 :uninstall
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&pause&exit
+@echo Begin uninstalling Realtek UAD driver.
+@echo.
 @devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @devcon /r disable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
