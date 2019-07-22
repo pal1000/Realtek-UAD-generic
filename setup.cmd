@@ -103,7 +103,7 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 @IF /I "%install%"=="y" pnputil /add-driver *.inf /subdirs /reboot
 @IF /I "%install%"=="y" echo.
-@del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @IF /I NOT "%install%"=="y" GOTO ending
 @echo Done installing driver
 @echo.
