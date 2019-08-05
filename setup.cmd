@@ -28,7 +28,7 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 :--------------------------------------
-@TITLE Update Realtek UAD generic driver
+@TITLE Realtek UAD generic driver setup
 @SET ERRORLEVEL=0
 @REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService > nul 2>&1
 @IF ERRORLEVEL 1 GOTO checkservice
