@@ -137,7 +137,7 @@ echo to a moment before the crash. The installer included in this package enable
 echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
 echo is then disabled if installation completes sucessfully. An utility that disables advanced startup menu on demand is included.)>"%~dp0recovery.txt"
 @echo Reverting Windows to normal startup...
-@bcdedit /set {globalsettings} advancedoptions false
+@bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
 
 :checkreboot
