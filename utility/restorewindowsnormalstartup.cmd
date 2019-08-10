@@ -30,5 +30,5 @@ if '%errorlevel%' NEQ '0' (
 :--------------------------------------
 @TITLE Restore Windows to normal startup
 @echo Reverting Windows to normal startup...
-@bcdedit /set {globalsettings} advancedoptions false
+@bcdedit /deletevalue {globalsettings} advancedoptions
 @pause
