@@ -117,7 +117,7 @@ echo to a moment before the crash. The installer included in this package enable
 echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
 echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.
 echo.
-echo A Realtek UAD generic driver initialization failure leading to Windows crash occurred at %currdate%:%time%)>"%~dp0recovery.txt"
+echo A Realtek UAD generic driver initialization failure leading to Windows crash occurred at %currdate%:%time%.)>"%~dp0recovery.txt"
 @echo Windows advanced startup menu is now permanently enabled for each full boot.>>"%~dp0recovery.txt"
 @echo To revert Windows startup to default mode run utility\restorewindowsnormalstartup.cmd.>>"%~dp0recovery.txt"
 @echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
