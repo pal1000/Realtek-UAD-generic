@@ -30,6 +30,10 @@ if '%errorlevel%' NEQ '0' (
 :--------------------------------------
 @rem Title and main page
 @TITLE Realtek UAD generic driver force updater
+@echo Force updater is retired for now until is needed again.
+@echo.
+@pause
+@exit
 @echo This tool will attempt to forcefully update Realtek UAD generic driver codec core component by replacing
 @echo older driver files with newer version. It is intended to run only after performing a driver update with setup.cmd.
 @echo.
