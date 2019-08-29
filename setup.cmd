@@ -50,6 +50,7 @@ if '%errorlevel%' NEQ '0' (
 @IF %runningservice% GTR 1 exit
 
 :uninstall
+@IF EXIST "%~dp0skipuninst.ini" GOTO install
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&pause&exit
@@ -95,12 +96,16 @@ if '%errorlevel%' NEQ '0' (
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" set /a drvcount+=1&IF !drvcount!==%ext% set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot
 @endlocal
 @echo.
-@echo Done uninstalling driver
-@echo.
+@echo Done uninstalling driver. We'll now log out again to reduce chances of reboot requirement even further.
+@pause
+@echo 0 >"%~dp0skipuninst.ini"
+@shutdown -l
+@exit
 
 :install
 @set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
 @echo.
+@IF /I "%install%"=="y" IF EXIST "%~dp0skipuninst.ini" del "%~dp0skipuninst.ini"
 @IF /I "%install%"=="y" pnputil /add-driver *.inf /subdirs /reboot
 @IF /I "%install%"=="y" echo.
 @IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
@@ -140,13 +145,19 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
 
+:enableforceupdater
+@echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+
 :checkreboot
 @set ERRORLEVEL=0
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations > nul 2>&1
-@IF ERRORLEVEL 1 pause&exit
+@IF ERRORLEVEL 1 GOTO ending
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
 @pause
 @shutdown -r -t 0
 
 :ending
+@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" echo Logging out so force updater can run...
+@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" pause
+@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" shutdown -l
