@@ -30,6 +30,7 @@ if '%errorlevel%' NEQ '0' (
 :--------------------------------------
 @rem Title and main page
 @TITLE Realtek UAD generic driver force updater
+@cls
 @rem echo Force updater is retired for now until is needed again.
 @rem echo.
 @rem pause

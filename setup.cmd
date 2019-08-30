@@ -152,19 +152,20 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
 
-:enableforceupdater
-@echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
-
 :checkreboot
 @set ERRORLEVEL=0
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations > nul 2>&1
-@IF ERRORLEVEL 1 GOTO ending
+@IF ERRORLEVEL 1 GOTO enableforceupdater
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
-@pause
-@shutdown -r -t 0
 
-:ending
-@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" echo Logging out so force updater can run...
-@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" pause
-@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" shutdown -l
+@rem Comment next line to disable force updater
+@echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+@pause
+
+@shutdown -r -t 0
+@exit
+
+:enableforceupdater
+@pause
+@call "%~dp0forceupdater\forceupdater.cmd"
