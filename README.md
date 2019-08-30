@@ -8,8 +8,8 @@ I have an old system that is not supported by OEM specific Realtek UAD drivers a
 ### How this package is built
 - Download latest `{version}_UAD_RTK*.zip` or  `{version}_UAD_WHQL_RTK*.zip` whichever is the newer version from `ftp://spcust@ftp3.realtek.com/Realtek`;
 - Extract `RTKVHD64.sys`,`RTAIODAT.DAT` and `hdxrt.cat` to destination codec folder;
-- Save [HDXRT.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/Codec_8781.1/HDXRT.inf) to target codec folder and adjust its `DriverVer` value to match with 'HDXMSI.inf` from the downloaded RTK package;
-- Save [HDX_GenericExt_RTK.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8726.1/HDX_GenericExt_RTK.inf) and [hdxrtext.cat](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8726.1/hdxrtext.cat) to target ExtRtk folder;
+- Save [HDXRT.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/Codec_8787.1/HDXRT.inf) and [HDXRTSST.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/Codec_8787.1/HDXRTSST.inf) to target codec folder;
+- Save [HDX_GenericExt_RTK.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8787.1/HDX_GenericExt_RTK.inf) and [hdxrtext.cat](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8787.1/hdxrtext.cat) to target ExtRtk folder and adjust in `HDX_GenericExt_RTK.inf`, `DriverVer` value to match with 'HDX_ExtMSI_RTK.inf` from the downloaded RTK package;
 - Extract RealtekAPO, RealtekHSA and RealtekService folders from RTK package.
 ### Official installer
 The MSI RTK package that this mod is most of time based off contains the official Realtek UAD installer. If you prefer it over my custom made open-source installer, move Win64 folder inside Official-Setup folder and run setup.exe as admin from there. Not all releases will have the official setup available.
