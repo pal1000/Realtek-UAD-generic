@@ -155,16 +155,16 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 :checkreboot
 @set ERRORLEVEL=0
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations > nul 2>&1
-@IF ERRORLEVEL 1 pause&GOTO enableforceupdater
+@IF ERRORLEVEL 1 pause&GOTO forceupdater
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
 
-@rem Comment next line to disable force updater
-@echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+@rem Seek force updater and try to run it on next logon if bundled.
+@IF EXIST "%~dp0forceupdater\forceupdater.cmd" echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 
 @pause
 @shutdown -r -t 0
 @exit
 
-:enableforceupdater
-@call "%~dp0forceupdater\forceupdater.cmd"
+:forceupdater
+@IF EXIST "%~dp0forceupdater\forceupdater.cmd" call "%~dp0forceupdater\forceupdater.cmd"

@@ -31,10 +31,14 @@ if '%errorlevel%' NEQ '0' (
 @rem Title and main page
 @TITLE Realtek UAD generic driver force updater
 @cls
+
+@rem Uncomment these lines to disable force updater
+@rem IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @rem echo Force updater is retired for now until is needed again.
 @rem echo.
 @rem pause
 @rem exit
+
 @echo This tool will attempt to forcefully update Realtek UAD generic driver codec core component by replacing
 @echo older driver files with newer version. It is intended to run only after performing a driver update with setup.cmd.
 @echo.
