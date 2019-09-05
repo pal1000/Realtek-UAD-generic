@@ -50,7 +50,6 @@ if '%errorlevel%' NEQ '0' (
 @IF %runningservice% GTR 1 exit
 
 :uninstall
-@IF EXIST "%~dp0skipuninst.ini" GOTO install
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&pause&exit
@@ -103,20 +102,23 @@ if '%errorlevel%' NEQ '0' (
 @echo.
 @endlocal
 @echo.
-@echo Done uninstalling driver. We'll now log out again to reduce chances of reboot requirement even further.
-@pause
-@echo 0 >"%~dp0skipuninst.ini"
-@shutdown -l
-@exit
+@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+@echo Restarting Windows Audio Service to unload Realtek APO...
+@echo.
+@net stop Audiosrv
+@echo.
+@IF EXIST %windir%\system32\RltkAPOU64.dll del %windir%\system32\RltkAPOU64.dll
+@net start Audiosrv
+@echo.
+@echo Done uninstalling driver.
+@echo.
 
 :install
 @set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
 @echo.
-@IF /I "%install%"=="y" IF EXIST "%~dp0skipuninst.ini" del "%~dp0skipuninst.ini"
-@IF /I "%install%"=="y" pnputil /add-driver *.inf /subdirs /reboot
-@IF /I "%install%"=="y" echo.
-@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @IF /I NOT "%install%"=="y" GOTO ending
+@pnputil /add-driver *.inf /subdirs /reboot
+@echo.
 @echo Done installing driver
 @echo.
 @pause
@@ -168,3 +170,5 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 
 :forceupdater
 @IF EXIST "%~dp0forceupdater\forceupdater.cmd" call "%~dp0forceupdater\forceupdater.cmd"
+
+:ending
