@@ -72,39 +72,39 @@ if '%errorlevel%' NEQ '0' (
 @set apo=0
 
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" (set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==hdxrt.inf set core=!drvcount!)
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="hdxrt.inf" set /a core=!drvcount!-1
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" (set /a drvcount+=1&IF !drvcount!==%core% (set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot))
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %core% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %core% EQU 0 echo.
 
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" (set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==hdxrtsst.inf set sst=!drvcount!)
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="hdxrtsst.inf" set /a sst=!drvcount!-1
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" (set /a drvcount+=1&IF !drvcount!==%sst% (set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot))
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %sst% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %sst% EQU 0 echo.
 
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" (set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==hdx_genericext_rtk.inf set ext=!drvcount!)
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="hdx_genericext_rtk.inf" set /a ext=!drvcount!-1
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" (set /a drvcount+=1&IF !drvcount!==%ext% (set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot))
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %ext% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %ext% EQU 0 echo.
 
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" (set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==realtekservice.inf set service=!drvcount!)
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="realtekservice.inf" set /a service=!drvcount!-1
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" (set /a drvcount+=1&IF !drvcount!==%service% (set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot))
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %service% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %service% EQU 0 echo.
 
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" (set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==realtekhsa.inf set hsa=!drvcount!)
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="realtekhsa.inf" set /a hsa=!drvcount!-1
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" (set /a drvcount+=1&IF !drvcount!==%hsa% (set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot))
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %hsa% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %hsa% EQU 0 echo.
 
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Original Name" (set /a drvcount+=1&set y=%%b&set y=!y:~6!&IF !y!==realtekapo.inf set apo=!drvcount!)
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="realtekapo.inf" set /a apo=!drvcount!-1
 @set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" (set /a drvcount+=1&IF !drvcount!==%apo% (set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot))
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %apo% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %apo% EQU 0 echo.
 
 @IF NOT %apo% EQU 0 echo Restarting Windows Audio Service to unload Realtek APO...
