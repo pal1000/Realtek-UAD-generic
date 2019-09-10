@@ -107,7 +107,6 @@ if '%errorlevel%' NEQ '0' (
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @IF "%%a"=="Published Name" (set /a drvcount+=1&IF !drvcount!==%apo% (set y=%%b&set y=!y:~5!&pnputil /delete-driver !y! /force /reboot))
 @echo.
 
-@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @IF NOT %apo% EQU 0 echo Restarting Windows Audio Service to unload Realtek APO...
 @IF NOT %apo% EQU 0 echo.
 @IF NOT %apo% EQU 0 net stop Audiosrv
@@ -117,6 +116,7 @@ if '%errorlevel%' NEQ '0' (
 @endlocal
 @echo Done uninstalling driver.
 @echo.
+@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 
 :install
 @set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
