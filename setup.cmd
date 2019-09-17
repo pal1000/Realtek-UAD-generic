@@ -107,7 +107,7 @@ if '%errorlevel%' NEQ '0' (
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %apo% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %apo% EQU 0 echo.
 
-@IF NOT %apo% EQU 0 echo Restarting Windows Audio Service to unload Realtek APO...
+@IF NOT %apo% EQU 0 echo Restarting Windows Audio Service to unload Realtek Audio Effects Component...
 @IF NOT %apo% EQU 0 echo.
 @IF NOT %apo% EQU 0 net stop Audiosrv
 @IF NOT %apo% EQU 0 echo.
