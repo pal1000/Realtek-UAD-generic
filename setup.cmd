@@ -67,6 +67,7 @@ if '%errorlevel%' NEQ '0' (
 @set core=0
 @set sst=0
 @set ext=0
+@set extraext=0
 @set service=0
 @set hsa=0
 @set apo=0
@@ -88,6 +89,12 @@ if '%errorlevel%' NEQ '0' (
 @set drvcount=0
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %ext% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %ext% EQU 0 echo.
+
+@set drvcount=0
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="GenericAudioExtRT.inf" set /a extraext=!drvcount!-1
+@set drvcount=0
+@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %extraext% pnputil /delete-driver !finddrv: =! /force /reboot
+@IF NOT %extraext% EQU 0 echo.
 
 @set drvcount=0
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if "!finddrv: =!"=="realtekservice.inf" set /a service=!drvcount!-1
