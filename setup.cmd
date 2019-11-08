@@ -29,11 +29,18 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
+@set srventa=1
+@set srventb=1
 @SET ERRORLEVEL=0
 @REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService > nul 2>&1
-@IF ERRORLEVEL 1 GOTO checkservice
+@IF ERRORLEVEL 1 set srventa=0
+@SET ERRORLEVEL=0
+@REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run /v RtkAudUService > nul 2>&1
+@IF ERRORLEVEL 1 set srventb=0
+@IF %srventa% EQU 0 IF %srventb% EQU 0 GOTO checkservice
 @echo Removing Realtek Universal Audio Service registration record...
-@REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
+@IF %srventa% EQU 1 REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
+@IF %srventb% EQU 1 REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run /v RtkAudUService /f > nul 2>&1
 @net stop RtkAudioUniversalService > nul 2>&1
 @sc delete RtkAudioUniversalService > nul 2>&1
 @echo Done.
