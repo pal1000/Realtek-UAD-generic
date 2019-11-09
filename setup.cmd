@@ -2,31 +2,50 @@
 
 :: BatchGotAdmin
 :-------------------------------------
-REM  --> Check for permissions
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
->nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
-) ELSE (
->nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
-)
+setlocal EnableDelayedExpansion
 
-REM --> If error flag set, we do not have admin.
-if '%errorlevel%' NEQ '0' (
-    echo Requesting administrative privileges...
-    goto UACPrompt
-) else ( goto gotAdmin )
+NET FILE 1>NUL 2>NUL
+if '%errorlevel%' == '0' ( goto START ) else ( goto getPrivileges ) 
 
-:UACPrompt
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    set params = %*:"=""
-    echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+:getPrivileges
+if '%1'=='ELEV' ( goto START )
 
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-    exit /B
+set "batchPath=%~f0"
+set "batchArgs=ELEV"
 
-:gotAdmin
-    pushd "%CD%"
-    CD /D "%~dp0"
+::Add quotes to the batch path, if needed
+set "script=%0"
+set script=%script:"=%
+IF '%0'=='!script!' ( GOTO PathQuotesDone )
+    set "batchPath=""%batchPath%"""
+:PathQuotesDone
+
+::Add quotes to the arguments, if needed.
+:ArgLoop
+IF '%1'=='' ( GOTO EndArgLoop ) else ( GOTO AddArg )
+    :AddArg
+    set "arg=%1"
+    set arg=%arg:"=%
+    IF '%1'=='!arg!' ( GOTO NoQuotes )
+        set "batchArgs=%batchArgs% "%1""
+        GOTO QuotesDone
+        :NoQuotes
+        set "batchArgs=%batchArgs% %1"
+    :QuotesDone
+    shift
+    GOTO ArgLoop
+:EndArgLoop
+
+::Create and run the vb script to elevate the batch file
+ECHO Set UAC = CreateObject^("Shell.Application"^) > "%temp%\OEgetPrivileges.vbs"
+ECHO UAC.ShellExecute "cmd", "/c ""!batchPath! !batchArgs!""", "", "runas", 1 >> "%temp%\OEgetPrivileges.vbs"
+"%temp%\OEgetPrivileges.vbs" 
+exit /B
+
+:START
+::Remove the elevation tag and set the correct working directory
+IF '%1'=='ELEV' ( shift /1 )
+cd /d %~dp0
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
 @set srventa=1
@@ -51,10 +70,8 @@ if '%errorlevel%' NEQ '0' (
 @set runningservice=0
 @for /f "USEBACKQ" %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe"`) do @set /a runningservice+=1 > nul
 @IF %runningservice% GTR 1 echo Attention! Active instances of Realtek Universal Audio Service are still running.
-@IF %runningservice% GTR 1 echo For them to terminate all users have to log out so save your work.
-@IF %runningservice% GTR 1 pause
-@IF %runningservice% GTR 1 shutdown -l
-@IF %runningservice% GTR 1 exit
+@IF %runningservice% GTR 1 echo Stopping all of them.
+taskkill /f /im RtkAudUService64.exe
 
 :uninstall
 @set ERRORLEVEL=0
