@@ -1,4 +1,7 @@
-@ECHO OFF
+@echo off
+
+:: BatchGotAdmin
+:-------------------------------------
 setlocal EnableDelayedExpansion
 
 NET FILE 1>NUL 2>NUL
@@ -43,7 +46,7 @@ exit /B
 ::Remove the elevation tag and set the correct working directory
 IF '%1'=='ELEV' ( shift /1 )
 endlocal
-cd /d "%~dp0"
+cd /d %~dp0
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
 @set srventa=1
