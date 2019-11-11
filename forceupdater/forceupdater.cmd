@@ -46,7 +46,7 @@ exit /B
 ::Remove the elevation tag and set the correct working directory
 IF '%1'=='ELEV' ( shift /1 )
 endlocal
-cd /d %~dp0
+cd /d "%~dp0"
 :--------------------------------------
 @rem Title and main page
 @TITLE Realtek UAD generic driver force updater
