@@ -68,11 +68,19 @@ cd /d "%~dp0"
 @sc delete RtkAudioUniversalService > nul 2>&1
 @echo Done.
 @echo.
+@set srvkillloop=0
 
 :checkservice
 @set runningservice=0
 @for /f "USEBACKQ" %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe"`) do @set /a runningservice+=1 > nul
 @IF %runningservice% GTR 1 echo Terminating per-user instances of Realtek Audio Universal Service...
+@IF %runningservice% GTR 1 set /a srvkillloop+=1
+@IF %srvkillloop% EQU 2 echo.
+@IF %srvkillloop% EQU 2 echo ERROR: Failed to terminate Realtek Audio Universal Service. Something is wrong.
+@IF %srvkillloop% EQU 2 echo Preess any key if you really want to continue.
+@IF %srvkillloop% EQU 2 echo.
+@IF %srvkillloop% EQU 2 pause > nul
+@IF %srvkillloop% EQU 2 GOTO cleandrvstore
 @IF %runningservice% GTR 1 taskkill /f /im RtkAudUService64.exe > nul 2>&1
 @IF %runningservice% GTR 1 echo.
 @IF %runningservice% GTR 1 echo Done.
