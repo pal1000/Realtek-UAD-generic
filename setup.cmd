@@ -49,6 +49,8 @@ endlocal
 cd /d "%~dp0"
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
+@echo Begin uninstalling Realtek UAD driver...
+@echo.
 @set srventa=1
 @set srventb=1
 @SET ERRORLEVEL=0
@@ -59,6 +61,7 @@ cd /d "%~dp0"
 @IF ERRORLEVEL 1 set srventb=0
 @IF %srventa% EQU 0 IF %srventb% EQU 0 GOTO checkservice
 @echo Removing Realtek Universal Audio Service registration record...
+@echo.
 @IF %srventa% EQU 1 REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
 @IF %srventb% EQU 1 REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run /v RtkAudUService /f > nul 2>&1
 @net stop RtkAudioUniversalService > nul 2>&1
@@ -70,7 +73,7 @@ cd /d "%~dp0"
 @set runningservice=0
 @for /f "USEBACKQ" %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe"`) do @set /a runningservice+=1 > nul
 @IF %runningservice% GTR 1 echo Terminating active instances of Realtek Universal Audio Service...
-@IF %runningservice% GTR 1 taskkill /f /im RtkAudUService64.exe
+@IF %runningservice% GTR 1 taskkill /f /im RtkAudUService64.exe > nul 2>&1
 @IF %runningservice% GTR 1 echo.
 @IF %runningservice% GTR 1 echo Done.
 @IF %runningservice% GTR 1 echo.
@@ -80,8 +83,6 @@ cd /d "%~dp0"
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&echo.&pause&exit
-@echo Begin uninstalling Realtek UAD driver...
-@echo.
 @echo @call %0 >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
 @echo.
