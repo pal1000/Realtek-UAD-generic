@@ -60,7 +60,7 @@ cd /d "%~dp0"
 @REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run /v RtkAudUService > nul 2>&1
 @IF ERRORLEVEL 1 set srventb=0
 @IF %srventa% EQU 0 IF %srventb% EQU 0 GOTO checkservice
-@echo Removing Realtek Universal Audio Service registration record...
+@echo Removing Realtek Audio Universal Service registration record...
 @echo.
 @IF %srventa% EQU 1 REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
 @IF %srventb% EQU 1 REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run /v RtkAudUService /f > nul 2>&1
@@ -72,14 +72,14 @@ cd /d "%~dp0"
 :checkservice
 @set runningservice=0
 @for /f "USEBACKQ" %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe"`) do @set /a runningservice+=1 > nul
-@IF %runningservice% GTR 1 echo Terminating active instances of Realtek Universal Audio Service...
+@IF %runningservice% GTR 1 echo Terminating per-user instances of Realtek Audio Universal Service...
 @IF %runningservice% GTR 1 taskkill /f /im RtkAudUService64.exe > nul 2>&1
 @IF %runningservice% GTR 1 echo.
 @IF %runningservice% GTR 1 echo Done.
 @IF %runningservice% GTR 1 echo.
 @IF %runningservice% GTR 1 GOTO checkservice
 
-:uninstall
+:cleandrvstore
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&echo.&pause&exit
