@@ -77,7 +77,7 @@ cd /d "%~dp0"
 @IF %runningservice% GTR 1 set /a srvkillloop+=1
 @IF %srvkillloop% EQU 2 echo.
 @IF %srvkillloop% EQU 2 echo ERROR: Failed to terminate Realtek Audio Universal Service. Something is wrong.
-@IF %srvkillloop% EQU 2 echo Preess any key if you really want to continue.
+@IF %srvkillloop% EQU 2 echo Press any key if you really want to continue.
 @IF %srvkillloop% EQU 2 echo.
 @IF %srvkillloop% EQU 2 pause > nul
 @IF %srvkillloop% EQU 2 GOTO cleandrvstore
