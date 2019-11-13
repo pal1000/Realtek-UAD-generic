@@ -51,6 +51,7 @@ cd /d "%~dp0"
 @TITLE Realtek UAD generic driver setup
 @echo Begin uninstalling Realtek UAD driver...
 @echo.
+@set srvkillloop=0
 @SET ERRORLEVEL=0
 @REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService > nul 2>&1
 @IF ERRORLEVEL 1 GOTO checkservice
@@ -61,7 +62,6 @@ cd /d "%~dp0"
 @sc delete RtkAudioUniversalService > nul 2>&1
 @echo Done.
 @echo.
-@set srvkillloop=0
 
 :checkservice
 @set runningservice=0
