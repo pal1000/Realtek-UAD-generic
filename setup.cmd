@@ -51,6 +51,11 @@ cd /d "%~dp0"
 @TITLE Realtek UAD generic driver setup
 @echo Begin uninstalling Realtek UAD driver...
 @echo.
+@echo Stopping Windows Audio service to reduce reboot likelihood...
+@echo.
+@net stop Audiosrv > nul 2>&1
+@echo Done.
+@echo.
 @echo Removing Realtek Audio Universal Service registration record...
 @echo.
 @REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
@@ -140,14 +145,10 @@ cd /d "%~dp0"
 @set drvcount=0
 @for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %apo% pnputil /delete-driver !finddrv: =! /force /reboot
 @IF NOT %apo% EQU 0 echo.
-
-@IF NOT %apo% EQU 0 echo Restarting Windows Audio Service to unload Realtek Audio Effects Component...
-@IF NOT %apo% EQU 0 echo.
-@IF NOT %apo% EQU 0 net stop Audiosrv
-@IF NOT %apo% EQU 0 echo.
-@IF NOT %apo% EQU 0 net start Audiosrv
-@IF NOT %apo% EQU 0 echo.
 @endlocal
+
+@net start Audiosrv
+@echo.
 @echo Done uninstalling driver.
 @echo.
 @IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
