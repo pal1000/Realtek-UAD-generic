@@ -8,10 +8,10 @@ I have an old system that is not supported by OEM specific Realtek UAD drivers a
 ### How this package is built
 - Download latest `{version}_UAD_RTK*.zip` or  `{version}_UAD_WHQL_RTK*.zip` whichever is the newer version from `ftp://spcust@ftp3.realtek.com/Realtek`; [1]
 - Download and extract last available release;
-- Extract and  `RTKVHD64.sys`and `RTAIODAT.DAT` from source codec folder, either `Win64` or `Win64\Realtek\Codec*` or `Realtek\Codec*` to `Realtek-UAD-generic\Win64\Realtek\UpdatedCodec` overwriting existing files; [1]
+- Extract `RTKVHD64.sys`and `RTAIODAT.DAT` from source codec folder, either `Win64` or `Win64\Realtek\Codec*` or `Realtek\Codec*` to `Realtek-UAD-generic\Win64\Realtek\UpdatedCodec` overwriting existing files; [1]
 - Remove `RealtekAPO_*`, `RealtekHSA_*` and `RealtekService_*` folders from `Realtek-UAD-generic\Win64\Realtek`; [1]
 - Extract `RealtekAPO_*`, `RealtekHSA_*` and `RealtekService_*` folders from RTK package located either under `Win64\Realtek` or `Realtek` folder to `Realtek-UAD-generic\Win64\Realtek`. [1]
 
-Note [1]: * means any number or characters or both or absolutely nothing.
+Note [1]: `*` means any number or characters or both or absolutely nothing.
 ### Official installer
 The MSI RTK package that this mod is most of time based off contains the official Realtek UAD installer. If you prefer it over my custom made open-source installer, move Win64 folder inside Official-Setup folder and run setup.exe as admin from there. Not all releases will have the official setup available.
