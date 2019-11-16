@@ -6,10 +6,12 @@ I have an old system that is not supported by OEM specific Realtek UAD drivers a
 - source code of installer and updater used by this package;
 - new release everytime official package that this mod is based on is updated on Realtek FTP server.
 ### How this package is built
-- Download latest `{version}_UAD_RTK*.zip` or  `{version}_UAD_WHQL_RTK*.zip` whichever is the newer version from `ftp://spcust@ftp3.realtek.com/Realtek`;
-- Extract `RTKVHD64.sys`,`RTAIODAT.DAT` and `hdxrt.cat` to destination codec folder;
-- Save [HDXRT.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/Codec_8791.1/HDXRT.inf) and [HDXRTSST.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/Codec_8791.1/HDXRTSST.inf) to target codec folder;
-- Save [HDX_GenericExt_RTK.inf](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8787.1/HDX_GenericExt_RTK.inf) and [hdxrtext.cat](https://raw.githubusercontent.com/alanfox2000/realtek-universal-audio-driver/master/UAD/Realtek/ExtRtk_8787.1/hdxrtext.cat) to target ExtRtk folder and adjust in `HDX_GenericExt_RTK.inf`, `DriverVer` value to match with 'HDX_MsiExt_RTK.inf` from the downloaded RTK package;
-- Extract RealtekAPO, RealtekHSA and RealtekService folders from RTK package.
+- Download latest `{version}_UAD_RTK*.zip` or  `{version}_UAD_WHQL_RTK*.zip` whichever is the newer version from `ftp://spcust@ftp3.realtek.com/Realtek`; [1]
+- Download and extract last available release;
+- Extract and  `RTKVHD64.sys`and `RTAIODAT.DAT` from source codec folder, either `Win64` or `Win64\Realtek\Codec*` or `Realtek\Codec*` to `Realtek-UAD-generic\Win64\Realtek\UpdatedCodec` overwriting existing files; [1]
+- Remove `RealtekAPO_*`, `RealtekHSA_*` and `RealtekService_*` folders from `Realtek-UAD-generic\Win64\Realtek`; [1]
+- Extract `RealtekAPO_*`, `RealtekHSA_*` and `RealtekService_*` folders from RTK package located either under `Win64\Realtek` or `Realtek` folder to `Realtek-UAD-generic\Win64\Realtek`. [1]
+
+Note [1]: * means any number or characters or both or absolutely nothing.
 ### Official installer
 The MSI RTK package that this mod is most of time based off contains the official Realtek UAD installer. If you prefer it over my custom made open-source installer, move Win64 folder inside Official-Setup folder and run setup.exe as admin from there. Not all releases will have the official setup available.
