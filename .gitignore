@@ -17,3 +17,6 @@
 /*RtkUWP*/
 # BSOD / GSOD recovery tutorial
 recovery.txt
+# Temporary files
+tmpFile
+tmpFile2

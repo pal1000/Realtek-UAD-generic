@@ -49,6 +49,9 @@ endlocal
 cd /d "%~dp0"
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
+@rem Get initial Windows pending file opertions status
+@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2>&1>tmpFile
+
 @echo Begin uninstalling Realtek UAD driver...
 @echo.
 @echo Stopping Windows Audio service to reduce reboot likelihood...
@@ -195,20 +198,22 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @echo.
 
 :checkreboot
-@set ERRORLEVEL=0
-@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations > nul 2>&1
-@IF ERRORLEVEL 1 pause&GOTO forceupdater
+@rem Get final Windows pending file opertions status
+@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2>&1>tmpFile2
+@FC /B tmpFile tmpFile2>NUL&&GOTO forceupdater
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
 
 @rem Seek force updater and try to run it on next logon if bundled.
 @IF EXIST "%~dp0forceupdater\forceupdater.cmd" echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
-
 @pause
 @shutdown -r -t 0
 @exit
 
 :forceupdater
+@pause
 @IF EXIST "%~dp0forceupdater\forceupdater.cmd" call "%~dp0forceupdater\forceupdater.cmd"
 
 :ending
+@del tmpFile
+@del tmpFile2
