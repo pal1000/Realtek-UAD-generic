@@ -50,7 +50,7 @@ cd /d "%~dp0"
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
 @rem Get initial Windows pending file opertions status
-@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2>&1>tmpFile
+@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>tmpFile 2>&1
 
 @echo Begin uninstalling Realtek UAD driver...
 @echo.
@@ -199,7 +199,7 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 
 :checkreboot
 @rem Get final Windows pending file opertions status
-@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations 2>&1>tmpFile2
+@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>tmpFile2 2>&1
 @FC /B tmpFile tmpFile2>NUL&&GOTO forceupdater
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
