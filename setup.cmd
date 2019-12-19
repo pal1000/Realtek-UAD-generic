@@ -98,58 +98,13 @@ cd /d "%~dp0"
 @echo.
 @devcon /r remove =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
-@setlocal ENABLEDELAYEDEXPANSION
-@set core=0
-@set sst=0
-@set ext=0
-@set extraext=0
-@set service=0
-@set hsa=0
-@set apo=0
-
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if /I "!finddrv: =!"=="hdxrt.inf" set /a core=!drvcount!-1
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %core% pnputil /delete-driver !finddrv: =! /force /reboot
-@IF NOT %core% EQU 0 echo.
-
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if /I "!finddrv: =!"=="hdxrtsst.inf" set /a sst=!drvcount!-1
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %sst% pnputil /delete-driver !finddrv: =! /force /reboot
-@IF NOT %sst% EQU 0 echo.
-
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if /I "!finddrv: =!"=="hdx_genericext_rtk.inf" set /a ext=!drvcount!-1
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %ext% pnputil /delete-driver !finddrv: =! /force /reboot
-@IF NOT %ext% EQU 0 echo.
-
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if /I "!finddrv: =!"=="GenericAudioExtRT.inf" set /a extraext=!drvcount!-1
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %extraext% pnputil /delete-driver !finddrv: =! /force /reboot
-@IF NOT %extraext% EQU 0 echo.
-
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if /I "!finddrv: =!"=="realtekservice.inf" set /a service=!drvcount!-1
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %service% pnputil /delete-driver !finddrv: =! /force /reboot
-@IF NOT %service% EQU 0 echo.
-
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if /I "!finddrv: =!"=="realtekhsa.inf" set /a hsa=!drvcount!-1
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %hsa% pnputil /delete-driver !finddrv: =! /force /reboot
-@IF NOT %hsa% EQU 0 echo.
-
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&if /I "!finddrv: =!"=="realtekapo.inf" set /a apo=!drvcount!-1
-@set drvcount=0
-@for /F "USEBACKQ tokens=1,2 delims=:" %%a IN (`pnputil /enum-drivers`) do @set /a drvcount+=1&set finddrv=%%b&IF !drvcount! EQU %apo% pnputil /delete-driver !finddrv: =! /force /reboot
-@IF NOT %apo% EQU 0 echo.
-@endlocal
-
+@call modules\deluadcomponent.cmd hdxrt.inf
+@call modules\deluadcomponent.cmd hdxrtsst.inf
+@call modules\deluadcomponent.cmd hdx_genericext_rtk.inf
+@call modules\deluadcomponent.cmd GenericAudioExtRT.inf
+@call modules\deluadcomponent.cmd realtekservice.inf
+@call modules\deluadcomponent.cmd realtekhsa.inf
+@call modules\deluadcomponent.cmd realtekapo.inf
 @net start Audiosrv
 @echo.
 @echo Done uninstalling driver.
