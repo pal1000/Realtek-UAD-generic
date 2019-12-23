@@ -98,6 +98,8 @@ cd /d "%~dp0"
 @echo.
 @devcon /r remove =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
+@echo Removing generic Realtek UAD components...
+@echo.
 @call modules\deluadcomponent.cmd hdxrt.inf
 @call modules\deluadcomponent.cmd hdxrtsst.inf
 @call modules\deluadcomponent.cmd hdx_genericext_rtk.inf
@@ -105,6 +107,21 @@ cd /d "%~dp0"
 @call modules\deluadcomponent.cmd realtekservice.inf
 @call modules\deluadcomponent.cmd realtekhsa.inf
 @call modules\deluadcomponent.cmd realtekapo.inf
+@echo Done.
+@echo.
+
+@IF EXIST oem.ini echo Removing OEM specific Realtek UAD components specified in oem.ini...
+@IF EXIST oem.ini echo.
+@setlocal EnableDelayedExpansion
+@IF EXIST oem.ini FOR /F "USEBACKQ tokens=*" %%a IN (`type oem.ini`) do @(
+set oemcomponent=%%a
+IF /I NOT !oemcomponent:~-4!==.inf set oemcomponent=!oemcomponent!.inf
+call modules\deluadcomponent.cmd !oemcomponent!
+)
+@endlocal
+@IF EXIST oem.ini echo Done.
+@IF EXIST oem.ini echo.
+
 @net start Audiosrv
 @echo.
 @echo Done uninstalling driver.
