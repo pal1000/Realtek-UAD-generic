@@ -6,7 +6,7 @@ NET FILE 1>NUL 2>NUL
 if '%errorlevel%' == '0' ( goto RestoreCD ) else ( goto getPrivileges )
 
 :getPrivileges
-powershell -Command Start-Process "%0" -Verb runAs 2>nul
+powershell -Command Start-Process ""%0"" -Verb runAs 2>nul
 exit
 
 :RestoreCD
