@@ -153,11 +153,11 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
 @rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
-@ping -n 4 127.0.0.1 >nul
+@CHOICE /N /T 4 /D y >nul 2>&1
 @devcon /rescan
 @echo.
 @echo Give Windows 20 seconds to load Realtek UAD driver...
-@ping -n 20 127.0.0.1 >nul
+@CHOICE /N /T 20 /D y >nul 2>&1
 @pause
 @echo.
 @rem If we got here then everything is OK.
