@@ -72,6 +72,11 @@ cd /d "%~dp0"
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&pause&exit
+@echo Stopping Windows Audio service to reduce reboot likelihood...
+@echo.
+@net stop Audiosrv > nul 2>&1
+@echo Done.
+@echo.
 @echo Begin force update procedure...
 @echo.
 @devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
@@ -99,6 +104,8 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @CHOICE /N /T 4 /D y >nul 2>&1
 
 @rem Start updated driver
+@echo.
+@net start Audiosrv
 @echo.
 @devcon /r enable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
 @echo.
