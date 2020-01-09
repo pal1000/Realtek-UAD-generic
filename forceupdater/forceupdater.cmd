@@ -63,7 +63,8 @@ cd /d "%~dp0"
 @IF NOT EXIST Win64\Realtek\UpdatedCodec exit
 
 @echo This tool will attempt to forcefully update Realtek UAD generic driver codec core component by replacing
-@echo older driver files with newer version. It is intended to run only after performing a driver update with setup.cmd.
+@echo older driver files with newer version. It is intended to run only after performing a driver update with main setup.
+@echo This tool may spontaneously restart your computer so please be prepared for it.
 @echo.
 @pause
 @cls

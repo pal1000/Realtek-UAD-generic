@@ -13,6 +13,13 @@ exit
 cd /d "%~dp0"
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
+
+@echo Welcome to Unofficial Realtek UAD generic setup wizard.
+@echo WARNING: This setup may spontaneously restart your computer so please be prepared for it.
+@echo.
+@pause
+@cls
+
 @rem Get initial Windows pending file opertions status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>tmpFile 2>&1
 
