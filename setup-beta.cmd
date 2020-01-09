@@ -148,14 +148,14 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @echo.
 
 @rem Seek force updater and try to run it on next logon if bundled.
-@IF EXIST "%~dp0forceupdater\forceupdater.cmd" echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+@IF EXIST "%~dp0forceupdater\forceupdater-beta.cmd" echo @call "%~dp0forceupdater\forceupdater-beta.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @pause
 @shutdown -r -t 0
 @exit
 
 :forceupdater
 @pause
-@IF EXIST "%~dp0forceupdater\forceupdater.cmd" call "%~dp0forceupdater\forceupdater.cmd"
+@IF EXIST "%~dp0forceupdater\forceupdater-beta.cmd" call "%~dp0forceupdater\forceupdater-beta.cmd"
 
 :ending
 @del tmpFile
