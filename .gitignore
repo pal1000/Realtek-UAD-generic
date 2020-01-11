@@ -15,8 +15,8 @@
 *.sys
 # Realtek Audio Control offline bundle
 /*RtkUWP*/
-# BSOD / GSOD recovery tutorial
-recovery.txt
+# BSOD / GSOD recovery tutorial and patches
+*.txt
 # Temporary files
 tmpFile
 tmpFile2
