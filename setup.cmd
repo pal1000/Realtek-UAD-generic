@@ -45,7 +45,9 @@ cd /d "%~dp0"
 @IF %runningservice% GTR 0 echo Terminating per-user instances of Realtek Audio Universal Service...
 @IF %runningservice% GTR 0 set /a srvkillloop+=1
 @IF %srvkillloop% EQU 2 echo.
-@IF %srvkillloop% EQU 2 echo ERROR: Failed to terminate Realtek Audio Universal Service. Something is wrong.
+@IF %srvkillloop% EQU 2 echo ERROR: Failed to terminate Audio Universal Service. Something is wrong.
+@IF %srvkillloop% EQU 2 echo You may be running an OEM specific Realtek UAD service. Realtek Audio control may not work.
+@IF %srvkillloop% EQU 2 echo.
 @IF %srvkillloop% EQU 2 echo Press any key if you really want to continue.
 @IF %srvkillloop% EQU 2 echo.
 @IF %srvkillloop% EQU 2 pause > nul
@@ -124,11 +126,11 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
 @rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
-@CHOICE /N /T 4 /D y >nul 2>&1
+@CHOICE /N /T 4 /C y /D y >nul 2>&1
 @devcon /rescan
 @echo.
 @echo Give Windows 20 seconds to load Realtek UAD driver...
-@CHOICE /N /T 20 /D y >nul 2>&1
+@CHOICE /N /T 20 /C y /D y >nul 2>&1
 @pause
 @echo.
 @rem If we got here then everything is OK.

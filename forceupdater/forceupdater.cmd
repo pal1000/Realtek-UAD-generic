@@ -78,7 +78,7 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
 @rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
-@CHOICE /N /T 4 /D y >nul 2>&1
+@CHOICE /N /T 4 /C y /D y >nul 2>&1
 
 @rem Start updated driver
 @echo.
@@ -89,7 +89,7 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @devcon /r enable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @echo Give Windows 10 seconds to load Realtek UAD driver...
-@CHOICE /N /T 10 /D y >nul 2>&1
+@CHOICE /N /T 10 /C y /D y >nul 2>&1
 @pause
 @echo.
 @rem If we got here then everything is OK.
