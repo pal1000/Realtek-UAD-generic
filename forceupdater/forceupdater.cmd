@@ -22,8 +22,6 @@ cd /d "%~dp0"
 @IF NOT EXIST Win64\Realtek\UpdatedCodec echo Force updater is retired for now until is needed again.
 @IF NOT EXIST Win64\Realtek\UpdatedCodec echo.
 @IF NOT EXIST Win64\Realtek\UpdatedCodec pause
-@IF NOT EXIST Win64\Realtek\UpdatedCodec IF EXIST tmpFile del tmpFile
-@IF NOT EXIST Win64\Realtek\UpdatedCodec IF EXIST tmpFile2 del tmpFile2
 @IF NOT EXIST Win64\Realtek\UpdatedCodec exit
 
 @echo This tool will attempt to forcefully update Realtek UAD generic driver codec core component by replacing

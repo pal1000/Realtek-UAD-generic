@@ -20,8 +20,9 @@ cd /d "%~dp0"
 @pause
 @cls
 
+@IF NOT EXIST assets md assets
 @rem Get initial Windows pending file opertions status
-@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>tmpFile 2>&1
+@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\prvregdmp.txt 2>&1
 
 @echo Begin uninstalling Realtek UAD driver...
 @echo.
@@ -35,14 +36,16 @@ cd /d "%~dp0"
 @rem FIXME: This should delete all registry values of REG_SZ type in that key with data containing
 @rem "windows\system32\RtkAudUService64.exe" ignore case.
 @REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
-@For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @net stop "%%a" >nul 2>&1
+@IF EXIST assets\uadservices.txt del assets\uadservices.txt
+@For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @echo %%a>>assets\uadservices.txt
+@IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @net stop "%%a" >nul 2>&1
 @taskkill /f /im RtkAudUService64.exe > nul 2>&1
 @set runningservice=0
 @for /f "USEBACKQ tokens=1 delims= " %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe" 2^>^&1`) do @IF %%a==RtkAudUService64.exe set /a runningservice+=1
-@IF %runningservice% GTR 0 For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @taskkill /FI "Services eq %%a" /F >nul 2>&1
+@IF %runningservice% GTR 0 For /f "tokens=*" %%a in (assets\uadservices.txt) do @taskkill /FI "Services eq %%a" /F >nul 2>&1
 @IF %runningservice% GTR 0 echo WARNING: Realtek Audio Universal Service did not properly shutdown.
 @IF %runningservice% GTR 0 echo.
-@For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @sc delete "%%a" >nul 2>&1
+@IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @sc delete "%%a" >nul 2>&1
 @echo Done.
 @echo.
 
@@ -132,8 +135,9 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 
 @rem Check if reboot is required
 @rem Get final Windows pending file opertions status
-@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>tmpFile2 2>&1
-@FC /B tmpFile tmpFile2>NUL&&GOTO forceupdater
+@REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\postregdmp.txt 2>&1
+@FC /B assets\prvregdmp.txt assets\postregdmp.txt>NUL&&GOTO forceupdater
+@IF EXIST assets RD /S /Q assets
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
 
@@ -144,9 +148,9 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @exit
 
 :forceupdater
+@IF EXIST assets RD /S /Q assets
 @pause
 @IF EXIST "%~dp0forceupdater\forceupdater.cmd" call "%~dp0forceupdater\forceupdater.cmd"
 
 :ending
-@del tmpFile
-@del tmpFile2
+@IF EXIST assets RD /S /Q assets
