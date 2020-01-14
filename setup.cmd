@@ -30,35 +30,23 @@ cd /d "%~dp0"
 @net stop Audiosrv > nul 2>&1
 @echo Done.
 @echo.
-@echo Removing Realtek Audio Universal Service registration record...
+@echo Removing Realtek Audio Universal Service...
 @echo.
+@rem FIXME: This should delete all registry values of REG_SZ type in that key with data containing
+@rem "windows\system32\RtkAudUService64.exe" ignore case.
 @REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
-@net stop RtkAudioUniversalService > nul 2>&1
-@sc delete RtkAudioUniversalService > nul 2>&1
-@echo Done.
-@echo.
-@set srvkillloop=0
-
-:checkservice
+@For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @net stop "%%a" >nul 2>&1
+@taskkill /f /im RtkAudUService64.exe > nul 2>&1
 @set runningservice=0
 @for /f "USEBACKQ tokens=1 delims= " %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe" 2^>^&1`) do @IF %%a==RtkAudUService64.exe set /a runningservice+=1
-@IF %runningservice% GTR 0 echo Terminating per-user instances of Realtek Audio Universal Service...
-@IF %runningservice% GTR 0 set /a srvkillloop+=1
-@IF %srvkillloop% EQU 2 echo.
-@IF %srvkillloop% EQU 2 echo ERROR: Failed to terminate Audio Universal Service. Something is wrong.
-@IF %srvkillloop% EQU 2 echo You may be running an OEM specific Realtek UAD service. Realtek Audio control may not work.
-@IF %srvkillloop% EQU 2 echo.
-@IF %srvkillloop% EQU 2 echo Press any key if you really want to continue.
-@IF %srvkillloop% EQU 2 echo.
-@IF %srvkillloop% EQU 2 pause > nul
-@IF %srvkillloop% EQU 2 GOTO cleandrvstore
-@IF %runningservice% GTR 0 taskkill /f /im RtkAudUService64.exe > nul 2>&1
+@IF %runningservice% GTR 0 For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @taskkill /FI "Services eq %%a" /F >nul 2>&1
+@IF %runningservice% GTR 0 echo WARNING: Realtek Audio Universal Service did not properly shutdown.
 @IF %runningservice% GTR 0 echo.
-@IF %runningservice% GTR 0 echo Done.
-@IF %runningservice% GTR 0 echo.
-@IF %runningservice% GTR 0 GOTO checkservice
+@For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @sc delete "%%a" >nul 2>&1
+@echo Done.
+@echo.
 
-:cleandrvstore
+@rem Clean Realtek UAD components from driver store.
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&echo.&pause&exit
@@ -101,7 +89,7 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @echo.
 @IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 
-:install
+@rem Install driver
 @set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
 @echo.
 @IF /I NOT "%install%"=="y" GOTO ending
@@ -112,7 +100,7 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @pause
 @echo.
 
-:start-driver
+@rem Start driver
 @for /F "tokens=2" %%a in ('date /t') do @set currdate=%%a
 @(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
 echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
@@ -142,7 +130,7 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
 
-:checkreboot
+@rem Check if reboot is required
 @rem Get final Windows pending file opertions status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>tmpFile2 2>&1
 @FC /B tmpFile tmpFile2>NUL&&GOTO forceupdater
