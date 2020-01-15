@@ -77,7 +77,7 @@ cd /d "%~dp0"
 @IF EXIST oem.ini echo Removing OEM specific Realtek UAD components specified in oem.ini...
 @IF EXIST oem.ini echo.
 @setlocal EnableDelayedExpansion
-@IF EXIST oem.ini FOR /F "USEBACKQ tokens=*" %%a IN (`type oem.ini`) do @(
+@IF EXIST oem.ini FOR /F "tokens=*" %%a IN (oem.ini) do @(
 set oemcomponent=%%a
 IF /I NOT !oemcomponent:~-4!==.inf set oemcomponent=!oemcomponent!.inf
 call modules\deluadcomponent.cmd !oemcomponent!
