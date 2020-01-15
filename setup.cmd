@@ -34,6 +34,8 @@ cd /d "%~dp0"
 @echo Removing Realtek Audio Universal Service...
 @echo.
 @For /f "tokens=*" %%a in ('CScript //nologo "modules\uadserviceusermode.vbs"') do @REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "%%a" /f > nul 2>&1
+
+@rem Reduce performance penalty of misbehaving security products on vbscript by caching and reusing execution results.
 @IF EXIST assets\uadservices.txt del assets\uadservices.txt
 @For /f "tokens=*" %%a in ('CScript //nologo "modules\finduadservices.vbs"') do @echo %%a>>assets\uadservices.txt
 @IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @net stop "%%a" >nul 2>&1
