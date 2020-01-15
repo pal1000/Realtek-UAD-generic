@@ -33,9 +33,7 @@ cd /d "%~dp0"
 @echo.
 @echo Removing Realtek Audio Universal Service...
 @echo.
-@rem FIXME: This should delete all registry values of REG_SZ type in that key with data containing
-@rem "windows\system32\RtkAudUService64.exe" ignore case.
-@REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v RtkAudUService /f > nul 2>&1
+@For /f "tokens=*" %%a in ('CScript /nologo "modules\uadserviceusermode.vbs"') do @REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "%%a" /f > nul 2>&1
 @IF EXIST assets\uadservices.txt del assets\uadservices.txt
 @For /f "tokens=*" %%a in ('CScript /nologo "modules\finduadservices.vbs"') do @echo %%a>>assets\uadservices.txt
 @IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @net stop "%%a" >nul 2>&1
