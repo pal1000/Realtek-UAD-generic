@@ -2,33 +2,19 @@
 
 :: BatchGotAdmin
 :-------------------------------------
-REM  --> Check for permissions
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
->nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
-) ELSE (
->nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
-)
+NET FILE 1>NUL 2>NUL
+if '%errorlevel%' == '0' ( goto RestoreCD ) else ( goto getPrivileges )
 
-REM --> If error flag set, we do not have admin.
-if '%errorlevel%' NEQ '0' (
-    echo Requesting administrative privileges...
-    goto UACPrompt
-) else ( goto gotAdmin )
+:getPrivileges
+powershell -Command Start-Process ""%0"" -Verb runAs 2>nul
+exit
 
-:UACPrompt
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    set params = %*:"=""
-    echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
-
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-    exit /B
-
-:gotAdmin
-    pushd "%CD%"
-    CD /D "%~dp0"
+:RestoreCD
+cd /d "%~dp0"
 :--------------------------------------
 @TITLE Restore Windows to normal startup
 @echo Reverting Windows to normal startup...
+@echo.
 @bcdedit /deletevalue {globalsettings} advancedoptions
+@echo.
 @pause
