@@ -28,24 +28,38 @@ cd /d "%~dp0"
 @echo.
 @echo Stopping Windows Audio service to reduce reboot likelihood...
 @echo.
-@net stop Audiosrv > nul 2>&1
+@net stop Audiosrv
+@echo.
 @echo Done.
 @echo.
 @echo Removing Realtek Audio Universal Service...
 @echo.
-@For /f "tokens=*" %%a in ('CScript //nologo "modules\uadserviceusermode.vbs"') do @REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "%%a" /f > nul 2>&1
+@For /f "tokens=*" %%a in ('CScript //nologo "modules\uadserviceusermode.vbs"') do @(
+REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "%%a" /f
+echo.
+)
 
 @rem Reduce performance penalty of misbehaving security products on vbscript by caching and reusing execution results.
 @IF EXIST assets\uadservices.txt del assets\uadservices.txt
 @For /f "tokens=*" %%a in ('CScript //nologo "modules\finduadservices.vbs"') do @echo %%a>>assets\uadservices.txt
-@IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @net stop "%%a" >nul 2>&1
-@taskkill /f /im RtkAudUService64.exe > nul 2>&1
+@IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @(
+net stop "%%a"
+echo.
+)
+@taskkill /f /im RtkAudUService64.exe
+@echo.
 @set runningservice=0
 @for /f "USEBACKQ tokens=1 delims= " %%a IN (`tasklist /FI "IMAGENAME eq RtkAudUService64.exe" 2^>^&1`) do @IF %%a==RtkAudUService64.exe set /a runningservice+=1
-@IF %runningservice% GTR 0 For /f "tokens=*" %%a in (assets\uadservices.txt) do @taskkill /FI "Services eq %%a" /F >nul 2>&1
+@IF %runningservice% GTR 0 For /f "tokens=*" %%a in (assets\uadservices.txt) do @(
+taskkill /FI "Services eq %%a" /F
+echo.
+)
 @IF %runningservice% GTR 0 echo WARNING: Realtek Audio Universal Service did not properly shutdown.
 @IF %runningservice% GTR 0 echo.
-@IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @sc delete "%%a" >nul 2>&1
+@IF EXIST assets\uadservices.txt For /f "tokens=*" %%a in (assets\uadservices.txt) do @(
+sc delete "%%a"
+echo.
+)
 @echo Done.
 @echo.
 

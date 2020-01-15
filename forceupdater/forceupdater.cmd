@@ -37,7 +37,8 @@ cd /d "%~dp0"
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&pause&exit
 @echo Stopping Windows Audio service to reduce reboot likelihood...
 @echo.
-@net stop Audiosrv > nul 2>&1
+@net stop Audiosrv
+@echo.
 @echo Done.
 @echo.
 @echo Begin force update procedure...
