@@ -20,6 +20,10 @@ cd /d "%~dp0"
 @pause
 @cls
 
+@echo Creating setup autostart entry...
+@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%~f0\"" /f
+@echo.
+
 @IF NOT EXIST assets md assets
 @rem Get initial Windows pending file opertions status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\prvregdmp.txt 2>&1
@@ -66,8 +70,7 @@ echo.
 @rem Clean Realtek UAD components from driver store.
 @set ERRORLEVEL=0
 @where /q devcon
-@IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&echo.&pause&exit
-@echo @call %0 >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
+@IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&echo.&pause&GOTO ending
 @devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @devcon /r disable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
@@ -104,12 +107,18 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @echo.
 @echo Done uninstalling driver.
 @echo.
-@IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 
 @rem Install driver
+@echo Removing autostart entry in case installation is rejected...
+@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe" /f
+@echo.
 @set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
 @echo.
 @IF /I NOT "%install%"=="y" GOTO ending
+
+@echo Restoring autostart entry as installation begins...
+@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%~f0\"" /f
+@echo.
 @pnputil /add-driver *.inf /subdirs /reboot
 @echo.
 @echo Done installing driver
@@ -124,9 +133,9 @@ echo to a moment before the crash. The installer included in this package enable
 echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
 echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.
 echo.
-echo A Realtek UAD generic driver initialization failure leading to Windows crash occurred at %currdate%:%time%.)>"%~dp0recovery.txt"
-@echo Windows advanced startup menu is now permanently enabled for each full boot.>>"%~dp0recovery.txt"
-@echo To revert Windows startup to default mode run utility\restorewindowsnormalstartup.cmd.>>"%~dp0recovery.txt"
+echo A Realtek UAD generic driver initialization failure leading to Windows crash occurred at %currdate%:%time%.)>recovery.txt
+@echo Windows advanced startup menu is now permanently enabled for each full boot.>>recovery.txt
+@echo To revert Windows startup to default mode run utility\restorewindowsnormalstartup.cmd.>>recovery.txt
 @echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
@@ -142,10 +151,13 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
 echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
 echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
-echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.)>"%~dp0recovery.txt"
+echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.)>recovery.txt
 @echo Reverting Windows to normal startup...
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
+@IF EXIST forceupdater\forceupdater.cmd echo Creating force updater autostart entry...
+@IF EXIST forceupdater\forceupdater.cmd REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%~dp0forceupdater\forceupdater.cmd\"" /f
+@IF EXIST forceupdater\forceupdater.cmd echo.
 
 @rem Check if reboot is required
 @rem Get final Windows pending file opertions status
@@ -154,9 +166,6 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @IF EXIST assets RD /S /Q assets
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
-
-@rem Seek force updater and try to run it on next logon if bundled.
-@IF EXIST "%~dp0forceupdater\forceupdater.cmd" echo @call "%~dp0forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
 @pause
 @shutdown -r -t 0
 @exit
@@ -164,7 +173,8 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 :forceupdater
 @IF EXIST assets RD /S /Q assets
 @pause
-@IF EXIST "%~dp0forceupdater\forceupdater.cmd" call "%~dp0forceupdater\forceupdater.cmd"
+@IF EXIST forceupdater\forceupdater.cmd call forceupdater\forceupdater.cmd
 
 :ending
 @IF EXIST assets RD /S /Q assets
+@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe" /f >nul 2>&1
