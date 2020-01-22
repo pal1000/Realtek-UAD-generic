@@ -1,16 +1,10 @@
 @echo off
-
-:: BatchGotAdmin
-:-------------------------------------
-NET FILE 1>NUL 2>NUL
-if '%errorlevel%' == '0' ( goto RestoreCD ) else ( goto getPrivileges )
-
-:getPrivileges
-powershell -Command Start-Process ""%0"" -Verb runAs 2>nul
-exit
-
-:RestoreCD
-cd /d "%~dp0"
+@cd /d "%~dp0"
+@"%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system" >nul 2>&1
+@if NOT '%errorlevel%' == '0' (
+@powershell -Command Start-Process ""%0"" -Verb runAs 2>nul
+@exit
+)
 :--------------------------------------
 @TITLE Restore Windows to normal startup
 @echo Reverting Windows to normal startup...
