@@ -13,8 +13,7 @@
 
 @rem Disable force updater if no UpdatedCodec folder is found in Win64\Realtek.
 @IF NOT EXIST Win64\Realtek\UpdatedCodec echo Force updater is retired for now until is needed again. Removing autostart entry...
-@IF NOT EXIST Win64\Realtek\UpdatedCodec REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe" /f
-@IF NOT EXIST Win64\Realtek\UpdatedCodec echo.
+@IF NOT EXIST Win64\Realtek\UpdatedCodec call modules\autostart.cmd remove
 @IF NOT EXIST Win64\Realtek\UpdatedCodec pause
 @IF NOT EXIST Win64\Realtek\UpdatedCodec exit
 
@@ -57,8 +56,7 @@
 
 @rem Prepare for a potential crash
 @echo Creating setup autostart entry in case of system instability...
-@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%~dp0..\setup.cmd\"" /f
-@echo.
+@call modules\autostart.cmd setup
 @for /F "tokens=2" %%a in ('date /t') do @set currdate=%%a
 @(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
 echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
@@ -95,6 +93,5 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
 @echo Removing autostart entry...
-@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe" /f
-@echo.
+@call modules\autostart.cmd remove
 @pause

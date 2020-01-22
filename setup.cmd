@@ -15,8 +15,7 @@
 @cls
 
 @echo Creating setup autostart entry...
-@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%~f0\"" /f
-@echo.
+@call modules\autostart.cmd setup
 
 @IF NOT EXIST assets md assets
 @rem Get initial Windows pending file opertions status
@@ -104,15 +103,13 @@ call modules\deluadcomponent.cmd !oemcomponent!
 
 @rem Install driver
 @echo Removing autostart entry in case installation is rejected...
-@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe" /f
-@echo.
+@call modules\autostart.cmd remove
 @set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
 @echo.
 @IF /I NOT "%install%"=="y" GOTO ending
 
 @echo Restoring autostart entry as installation begins...
-@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%~f0\"" /f
-@echo.
+@call modules\autostart.cmd setup
 @pnputil /add-driver *.inf /subdirs /reboot
 @echo.
 @echo Done installing driver
@@ -150,8 +147,7 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
 @IF EXIST forceupdater\forceupdater.cmd echo Creating force updater autostart entry...
-@IF EXIST forceupdater\forceupdater.cmd REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%~dp0forceupdater\forceupdater.cmd\"" /f
-@IF EXIST forceupdater\forceupdater.cmd echo.
+@IF EXIST forceupdater\forceupdater.cmd call modules\autostart.cmd forceupdater
 
 @rem Check if reboot is required
 @rem Get final Windows pending file opertions status
@@ -171,4 +167,4 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 
 :ending
 @IF EXIST assets RD /S /Q assets
-@REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe" /f >nul 2>&1
+@call modules\autostart.cmd remove >nul 2>&1
