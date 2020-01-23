@@ -7,7 +7,7 @@
 )
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
-
+@IF NOT "%SAFEBOOT_OPTION%"=="" TITLE Realtek UAD generic driver setup (safe mode recovery)
 @echo Welcome to Unofficial Realtek UAD generic setup wizard.
 @echo WARNING: This setup may spontaneously restart your computer so please be prepared for it.
 @echo.
@@ -23,22 +23,26 @@
 
 @echo Begin uninstalling Realtek UAD driver...
 @echo.
+@IF "%SAFEBOOT_OPTION%"=="" (
 @echo Stopping Windows Audio service to reduce reboot likelihood...
 @echo.
 @net stop Audiosrv
 @echo.
 @echo Done.
 @echo.
+)
 @call modules\uadserviceremove.cmd RtkAudUService64.exe
 
 @rem Clean Realtek UAD components from driver store.
 @set ERRORLEVEL=0
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&echo.&pause&GOTO ending
+@IF "%SAFEBOOT_OPTION%"=="" (
 @devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @devcon /r disable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
+)
 @devcon /r remove =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @devcon /r remove =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
@@ -67,16 +71,19 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @IF EXIST oem.ini echo Done.
 @IF EXIST oem.ini echo.
 
+@IF "%SAFEBOOT_OPTION%"=="" (
 @net start Audiosrv
 @echo.
+)
 @echo Done uninstalling driver.
 @echo.
 
 @rem Install driver
 @echo Removing autostart entry in case installation is rejected...
 @call modules\autostart.cmd remove
-@set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
-@echo.
+@IF "%SAFEBOOT_OPTION%"=="" set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
+@IF "%SAFEBOOT_OPTION%"=="" echo.
+@IF NOT "%SAFEBOOT_OPTION%"=="" pause
 @IF /I NOT "%install%"=="y" GOTO ending
 
 @echo Restoring autostart entry as installation begins...
