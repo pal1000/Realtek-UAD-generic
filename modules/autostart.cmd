@@ -2,14 +2,13 @@
 @set autostart="%~f0"
 @set autostart=%autostart:~1,-23%
 
+@rem Get original shell command
+@IF NOT EXIST assets\origshell.reg REG EXPORT "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" assets\origshell.reg >nul
+@set exitloop=1
+@For /f tokens^=1^,2^*^ delims^=^=^ eol^= %%a in ('Find /v "" assets\origshell.reg') do @IF defined exitloop IF /I %%a=="Shell" (@set "exitloop="&set origshell=%%b)
+
 @rem Generate autostart commands
-@IF %1==setup IF EXIST beta.ini REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%autostart%\setup.cmd\"" /f
-@IF %1==forceupdater IF EXIST beta.ini REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe,cmd /C call \"%autostart%\forceupdater\forceupdater.cmd\"" /f
-@IF %1==remove IF EXIST beta.ini REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "explorer.exe" /f
-
-@IF %1==setup IF NOT EXIST beta.ini echo @call "%autostart%\setup.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
-@IF %1==forceupdater IF NOT EXIST beta.ini echo @call "%autostart%\forceupdater\forceupdater.cmd" >"%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
-@IF %1==remove IF NOT EXIST beta.ini IF EXIST "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd" del "%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp\uadsetup.cmd"
-
-@IF NOT EXIST beta.ini echo Done.
+@IF %1==setup REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "%origshell:~1,-1%,cmd /C call \"%autostart%\setup.cmd\"" /f
+@IF %1==forceupdater REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "%origshell:~1,-1%,cmd /C call \"%autostart%\forceupdater\forceupdater.cmd\"" /f
+@IF %1==remove REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "%origshell:~1,-1%" /f
 @echo.
