@@ -13,11 +13,11 @@
 @echo.
 @pause
 @cls
+@IF NOT EXIST assets md assets
 
 @echo Creating setup autostart entry...
 @call modules\autostart.cmd setup
 
-@IF NOT EXIST assets md assets
 @rem Get initial Windows pending file opertions status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\prvregdmp.txt 2>&1
 
@@ -131,7 +131,8 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @rem Get final Windows pending file opertions status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\postregdmp.txt 2>&1
 @FC /B assets\prvregdmp.txt assets\postregdmp.txt>NUL&&GOTO forceupdater
-@IF EXIST assets RD /S /Q assets
+@IF EXIST assets\prvregdmp.txt del assets\prvregdmp.txt
+@IF EXIST assets\postregdmp.txt.txt del assets\postregdmp.txt
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
 @pause
@@ -139,10 +140,11 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 @exit
 
 :forceupdater
-@IF EXIST assets RD /S /Q assets
+@IF EXIST assets\prvregdmp.txt del assets\prvregdmp.txt
+@IF EXIST assets\postregdmp.txt.txt del assets\postregdmp.txt
 @pause
 @IF EXIST forceupdater\forceupdater.cmd call forceupdater\forceupdater.cmd
 
 :ending
-@IF EXIST assets RD /S /Q assets
 @call modules\autostart.cmd remove >nul 2>&1
+@IF EXIST assets RD /S /Q assets
