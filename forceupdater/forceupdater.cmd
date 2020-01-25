@@ -57,7 +57,7 @@
 @rem Prepare for a potential crash
 @echo Creating setup autostart entry in case of system instability...
 @call modules\autostart.cmd setup
-@for /F "tokens=2" %%a in ('date /t') do @set currdate=%%a
+@for /F tokens^=2^ eol^= %%a in ('date /t') do @set currdate=%%a
 @(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
 echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
 echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
