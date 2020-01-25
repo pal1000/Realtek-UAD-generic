@@ -3,4 +3,4 @@
 set "exitloop="
 set drvprefix=%%a
 )
-@IF EXIST Win64\Realtek\UpdatedCodec\patch.txt FOR /F tokens^=1^-5^ delims^=^,^ eol=^ %%a IN (Win64\Realtek\UpdatedCodec\patch.txt) do @IF %%a==HKR call forceupdater\%%a.cmd %%b %%c %%d %%e
+@IF EXIST Win64\Realtek\UpdatedCodec\patch.txt FOR /F tokens^=1^-5^ delims^=^,^ eol^= %%a IN (Win64\Realtek\UpdatedCodec\patch.txt) do @IF %%a==HKR call forceupdater\%%a.cmd %%b %%c %%d %%e
