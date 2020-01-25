@@ -3,9 +3,11 @@
 @set autostart=%autostart:~1,-23%
 
 @rem Get original shell command
-@IF NOT EXIST assets\origshell.reg REG EXPORT "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" assets\origshell.reg >nul
-@set exitloop=1
-@For /f tokens^=1^,2^*^ delims^=^=^ eol^= %%a in ('Find /v "" assets\origshell.reg') do @IF defined exitloop IF /I %%a=="Shell" (@set "exitloop="&set origshell=%%b)
+@IF NOT EXIST assets\origshell.txt For /f tokens^=^*^ eol^= %%a in ('CScript //nologo "modules\getshell.vbs"') do @(
+set origshell="%%a"
+echo "%%a">assets\origshell.txt
+)
+@IF NOT defined origshell For /f tokens^=^*^ eol^= %%a in ('Find /v "" assets\origshell.txt') do @set origshell=%%a
 
 @rem Generate autostart commands
 @IF %1==setup REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "%origshell:~1,-1%,cmd /C call \"%autostart%\setup.cmd\"" /f
