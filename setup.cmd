@@ -8,8 +8,23 @@
 :--------------------------------------
 @TITLE Realtek UAD generic driver setup
 @IF NOT "%SAFEBOOT_OPTION%"=="" TITLE Realtek UAD generic driver setup (safe mode recovery)
+
+@rem Just wipe autostart entry if force updater reboots Windows to normal mode when enabling sound card.
+@IF "%SAFEBOOT_OPTION%"=="" IF EXIST assets\setupdone.ini (
+@echo Installation completed successfully.
+@echo.
+@echo Reverting Windows to normal startup...
+@bcdedit /deletevalue {globalsettings} advancedoptions
+@echo.
+@pause
+@GOTO ending
+)
 @echo Welcome to Unofficial Realtek UAD generic setup wizard.
 @echo WARNING: This setup may spontaneously restart your computer so please be prepared for it.
+@echo.
+@echo If Windows crashes (BSOD/GSOD), please boot into safe mode as soon as possible.
+@echo Don't use Safe Mode with Command Prompt as it doesn't load shell which setup relies on to autostart even in Safe mode.
+@echo Setup makes going into safe mode very easy and it will autostart to restore system stability.
 @echo.
 @pause
 @cls
@@ -81,9 +96,15 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @rem Install driver
 @echo Removing autostart entry in case installation is rejected...
 @call modules\autostart.cmd remove
-@IF "%SAFEBOOT_OPTION%"=="" set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
-@IF "%SAFEBOOT_OPTION%"=="" echo.
-@IF NOT "%SAFEBOOT_OPTION%"=="" pause
+@IF NOT "%SAFEBOOT_OPTION%"=="" IF EXIST assets\mainsetupsystemcrash.ini (
+@echo WARNING: Windows crashed during main setup driver initiallization phase.
+@echo UAD driver installation is canceled.
+@echo.
+@pause
+@GOTO ending
+)
+@set /p install=Do you want to install unofficial and minimal Realtek UAD generic package (y/n):
+@echo.
 @IF /I NOT "%install%"=="y" GOTO ending
 
 @echo Restoring autostart entry as installation begins...
@@ -95,21 +116,14 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @pause
 @echo.
 
-@rem Start driver
-@for /F tokens^=2^ eol^= %%a in ('date /t') do @set currdate=%%a
-@(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
-echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
-echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
-echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.
-echo.
-echo A Realtek UAD generic driver initialization failure leading to Windows crash occurred at %currdate%:%time%.)>recovery.txt
-@echo Windows advanced startup menu is now permanently enabled for each full boot.>>recovery.txt
-@echo To revert Windows startup to default mode run utility\restorewindowsnormalstartup.cmd.>>recovery.txt
+@rem Start driver (this doesn't run in safe mode)
+@IF "%SAFEBOOT_OPTION%"=="" (
 @echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
-@rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
-@CHOICE /N /T 4 /C y /D y >nul 2>&1
+@echo 1>assets\mainsetupsystemcrash.ini
+@rem Wait 1 second to write crash stamp to disk before taking the risk of starting the driver.
+@CHOICE /N /T 1 /C y /D y >nul 2>&1
 @devcon /rescan
 @echo.
 @echo Give Windows 20 seconds to load Realtek UAD driver...
@@ -117,22 +131,26 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @pause
 @echo.
 @rem If we got here then everything is OK.
-@(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
-echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
-echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
-echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.)>recovery.txt
 @echo Reverting Windows to normal startup...
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
+@del assets\mainsetupsystemcrash.ini
+@rem Force updater doesn't run in safe mode
 @IF EXIST forceupdater\forceupdater.cmd echo Creating force updater autostart entry...
 @IF EXIST forceupdater\forceupdater.cmd call modules\autostart.cmd forceupdater
+)
+
+@IF EXIST forceupdater\forceupdater.cmd IF NOT "%SAFEBOOT_OPTION%"=="" (
+@echo WARNING: You are in safe mode. Force updater won't run to update driver beyond latest WHQL generic base.
+@echo.
+)
 
 @rem Check if reboot is required
 @rem Get final Windows pending file opertions status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\postregdmp.txt 2>&1
 @FC /B assets\prvregdmp.txt assets\postregdmp.txt>NUL&&GOTO forceupdater
 @IF EXIST assets\prvregdmp.txt del assets\prvregdmp.txt
-@IF EXIST assets\postregdmp.txt.txt del assets\postregdmp.txt
+@IF EXIST assets\postregdmp.txt del assets\postregdmp.txt
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
 @echo.
 @pause
@@ -141,9 +159,10 @@ echo is then disabled if installation completes sucessfully. A tool that disable
 
 :forceupdater
 @IF EXIST assets\prvregdmp.txt del assets\prvregdmp.txt
-@IF EXIST assets\postregdmp.txt.txt del assets\postregdmp.txt
+@IF EXIST assets\postregdmp.txt del assets\postregdmp.txt
 @pause
-@IF EXIST forceupdater\forceupdater.cmd call forceupdater\forceupdater.cmd
+@rem Force updater doesn't run in safe mode
+@IF EXIST forceupdater\forceupdater.cmd IF "%SAFEBOOT_OPTION%"=="" call forceupdater\forceupdater.cmd
 
 :ending
 @call modules\autostart.cmd remove >nul 2>&1

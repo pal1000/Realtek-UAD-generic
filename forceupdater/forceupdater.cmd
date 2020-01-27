@@ -21,6 +21,11 @@
 @echo older driver files with newer version. It is intended to run only after performing a driver update with main setup.
 @echo WARNING: This tool may spontaneously restart your computer so please be prepared for it.
 @echo.
+@echo If Windows crashes (BSOD/GSOD), please boot into safe mode as soon as possible.
+@echo Don't use Safe Mode with Command Prompt as it doesn't load shell which is required to autostart even in Safe mode.
+@echo Force updater makes going into safe mode very easy
+@echo and it can restart main setup from scratch to restore system stability.
+@echo.
 @pause
 @cls
 
@@ -54,23 +59,16 @@
 @IF EXIST Win64\Realtek\UpdatedCodec\*.txt echo Done.
 @IF EXIST Win64\Realtek\UpdatedCodec\*.txt echo.
 
-@rem Prepare for a potential crash
-@echo Creating setup autostart entry in case of system instability...
+@rem Prepare for a potential restart or crash when starting force updated driver
+@echo Creating setup autostart entry to either start over or finish setup on reboot if necessary...
 @call modules\autostart.cmd setup
-@for /F tokens^=2^ eol^= %%a in ('date /t') do @set currdate=%%a
-@(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
-echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
-echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
-echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.
-echo.
-echo A Realtek UAD generic driver initialization failure leading to Windows crash occurred at %currdate%:%time%.)>recovery.txt
-@echo Windows advanced startup menu is now permanently enabled for each full boot.>>recovery.txt
-@echo To revert Windows startup to default mode run utility\restorewindowsnormalstartup.cmd.>>recovery.txt
 @echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
-@rem Wait 4 seconds to write recovery instructions to disk before taking the risk of starting the driver.
-@CHOICE /N /T 4 /C y /D y >nul 2>&1
+@rem Create a flag for main setup to do a postinstall cleanup if Windows reboots normally here
+@echo 1>assets\setupdone.ini
+@rem Wait 1 second to write setup configuration to disk before taking the risk of starting the driver.
+@CHOICE /N /T 1 /C y /D y >nul 2>&1
 
 @rem Start updated driver
 @echo.
@@ -85,10 +83,7 @@ echo A Realtek UAD generic driver initialization failure leading to Windows cras
 @pause
 @echo.
 @rem If we got here then everything is OK.
-@(echo If Windows crashes during the initialization of Realtek UAD generic driver you may have to perform a system restore
-echo to a moment before the crash. The installer included in this package enables Windows advanced startup menu
-echo so that entering Safe mode to access system restore is much easier, avoiding further crashes. Advanced startup menu
-echo is then disabled if installation completes sucessfully. A tool that disables advanced startup menu is included.)>recovery.txt
+@del assets\setupdone.ini
 @echo Reverting Windows to normal startup...
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
