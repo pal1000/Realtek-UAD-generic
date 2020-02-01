@@ -136,11 +136,11 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @echo.
 @del assets\mainsetupsystemcrash.ini
 @rem Force updater doesn't run in safe mode
-@IF EXIST forceupdater\forceupdater.cmd echo Creating force updater autostart entry...
-@IF EXIST forceupdater\forceupdater.cmd call modules\autostart.cmd forceupdater
+@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec echo Creating force updater autostart entry...
+@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec call modules\autostart.cmd forceupdater
 )
 
-@IF EXIST forceupdater\forceupdater.cmd IF NOT "%SAFEBOOT_OPTION%"=="" (
+@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec IF NOT "%SAFEBOOT_OPTION%"=="" (
 @echo WARNING: You are in safe mode. Force updater won't run to update driver beyond latest WHQL generic base.
 @echo.
 )
@@ -162,7 +162,7 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @IF EXIST assets\postregdmp.txt del assets\postregdmp.txt
 @pause
 @rem Force updater doesn't run in safe mode
-@IF EXIST forceupdater\forceupdater.cmd IF "%SAFEBOOT_OPTION%"=="" call forceupdater\forceupdater.cmd
+@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec IF "%SAFEBOOT_OPTION%"=="" call forceupdater\forceupdater.cmd
 
 :ending
 @call modules\autostart.cmd remove >nul 2>&1
