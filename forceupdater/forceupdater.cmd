@@ -41,9 +41,7 @@
 @echo.
 @echo Begin force update procedure...
 @echo.
-@devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
-@echo.
-@devcon /r disable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
+@devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*" "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @echo Copying files...
 @echo.
@@ -52,12 +50,12 @@
 @echo.
 @echo Done.
 @echo.
-@IF EXIST Win64\Realtek\UpdatedCodec\*.txt echo Applying registry patch...
-@IF EXIST Win64\Realtek\UpdatedCodec\*.txt echo.
-@IF EXIST Win64\Realtek\UpdatedCodec\*.txt call forceupdater\regedit.cmd
-@IF EXIST Win64\Realtek\UpdatedCodec\*.txt echo.
-@IF EXIST Win64\Realtek\UpdatedCodec\*.txt echo Done.
-@IF EXIST Win64\Realtek\UpdatedCodec\*.txt echo.
+@IF EXIST patches\*.* echo Applying registry patch...
+@IF EXIST patches\*.* echo.
+@IF EXIST patches\*.* call forceupdater\regedit.cmd
+@IF EXIST patches\*.* echo.
+@IF EXIST patches\*.* echo Done.
+@IF EXIST patches\*.* echo.
 
 @rem Prepare for a potential restart or crash when starting force updated driver
 @echo Creating setup autostart entry to either start over or finish setup on reboot if necessary...
@@ -74,9 +72,7 @@
 @echo.
 @net start Audiosrv
 @echo.
-@devcon /r enable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*"
-@echo.
-@devcon /r enable =MEDIA "INTELAUDIO\FUNC_01&VEN_10EC*"
+@devcon /r enable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*" "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @echo Give Windows 10 seconds to load Realtek UAD driver...
 @CHOICE /N /T 10 /C y /D y >nul 2>&1
