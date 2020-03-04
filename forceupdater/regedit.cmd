@@ -1,6 +1,6 @@
 @rem Locate sound card MEDIA class position
 @IF EXIST patches\*.hkr set exitloop=1
-@IF EXIST patches\*.hkr FOR /F tokens^=1^ eol^= %%a IN ('REG QUERY HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e96c-e325-11ce-bfc1-08002be10318} /f 1-13-2020 /e /s') do @IF defined exitloop (
+@IF EXIST patches\*.hkr FOR /F tokens^=1^ eol^= %%a IN ('REG QUERY HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e96c-e325-11ce-bfc1-08002be10318} /f 1-14-2020 /e /s') do @IF defined exitloop (
 set "exitloop="
 set drvprefix=%%a
 )
