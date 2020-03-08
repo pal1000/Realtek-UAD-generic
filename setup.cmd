@@ -58,6 +58,24 @@
 )
 @devcon /r remove =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*" "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
+@IF "%SAFEBOOT_OPTION%"=="" (
+@devcon /r disable =SoftwareComponent "SWC\VEN_10EC&AID_0001"
+@echo.
+)
+@devcon /r remove =SoftwareComponent "SWC\VEN_10EC&AID_0001"
+@echo.
+@IF "%SAFEBOOT_OPTION%"=="" (
+@devcon /r disable =SoftwareComponent "SWC\VEN_10EC&HID_0001"
+@echo.
+)
+@devcon /r remove =SoftwareComponent "SWC\VEN_10EC&HID_0001"
+@echo.
+@IF "%SAFEBOOT_OPTION%"=="" (
+@devcon /r disable =SoftwareComponent "SWC\VEN_10EC&SID_0001"
+@echo.
+)
+@devcon /r remove =SoftwareComponent "SWC\VEN_10EC&SID_0001"
+@echo.
 @echo Removing generic Realtek UAD components...
 @echo.
 @call modules\deluadcomponent.cmd hdxrt.inf
