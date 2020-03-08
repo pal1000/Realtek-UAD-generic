@@ -1,16 +1,4 @@
-@rem REG cmd prefix
-@set regcmd=REG ADD %drvprefix%\%1
-
-@rem Add value
-@set regcmd=%regcmd% /v %2
-
-@rem Add type
-@IF %3==0x10001 set regcmd=%regcmd% /t REG_DWORD
-
-@rem Add data
-@set regcmd=%regcmd% /d %4
-
-@rem Work silently
-@set regcmd=%regcmd% /f
-
+@IF %3 EQU 0x10001 set regcmd=REG ADD %drvprefix%\%1 /v %2 /t REG_DWORD /d %4 /f
+@IF %3 EQU 0x10000 set regcmd=REG ADD %drvprefix%\%1 /v %2 /t REG_MULTI_SZ /d %4 /f
+@IF %3 EQU 0x0 set regcmd=REG ADD %drvprefix%\%1 /v %2 /t REG_SZ /d %4 /f
 @%regcmd%
