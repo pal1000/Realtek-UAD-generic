@@ -12,3 +12,6 @@ set drvprefix=%%a
 
 @rem INTELAUDIO codec post INF install patching
 @IF EXIST patches\codec-sst.hkr IF /I %audiotype%==INTELAUDIO FOR /F tokens^=1^-5^ delims^=^,^ eol^= %%a IN (patches\codec-sst.hkr) do @IF %%a==HKR call forceupdater\%%a.cmd %%b %%c %%d %%e
+
+@rem Extension post INF install patching
+@IF EXIST patches\ext.hkr FOR /F tokens^=1^-5^ delims^=^,^ eol^= %%a IN (patches\ext.hkr) do @IF %%a==HKR call forceupdater\%%a.cmd %%b %%c %%d %%e
