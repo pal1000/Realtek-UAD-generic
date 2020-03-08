@@ -35,7 +35,7 @@
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&pause&exit
 @echo Stopping Windows Audio service to reduce reboot likelihood...
 @echo.
-@net stop Audiosrv
+@net stop Audiosrv /y
 @echo.
 @echo Done.
 @echo.

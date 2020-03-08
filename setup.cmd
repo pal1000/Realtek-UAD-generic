@@ -41,7 +41,7 @@
 @IF "%SAFEBOOT_OPTION%"=="" (
 @echo Stopping Windows Audio service to reduce reboot likelihood...
 @echo.
-@net stop Audiosrv
+@net stop Audiosrv /y
 @echo.
 @echo Done.
 @echo.

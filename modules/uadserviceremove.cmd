@@ -9,7 +9,7 @@ echo.
 @IF EXIST assets\uadservices.txt del assets\uadservices.txt
 @For /f tokens^=^*^ eol^= %%a in ('CScript //nologo "modules\finduadservices.vbs" %1') do @echo %%a>>assets\uadservices.txt
 @IF EXIST assets\uadservices.txt IF "%SAFEBOOT_OPTION%"=="" For /f tokens^=^*^ eol^= %%a in (assets\uadservices.txt) do @(
-net stop "%%a"
+net stop "%%a" /y
 echo.
 )
 @IF "%SAFEBOOT_OPTION%"=="" (
