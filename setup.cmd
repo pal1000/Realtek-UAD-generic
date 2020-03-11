@@ -53,12 +53,6 @@
 @where /q devcon
 @IF ERRORLEVEL 1 echo Windows Device console - devcon.exe is required.&echo.&pause&GOTO ending
 @IF "%SAFEBOOT_OPTION%"=="" (
-@devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*" "INTELAUDIO\FUNC_01&VEN_10EC*"
-@echo.
-)
-@devcon /r remove =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*" "INTELAUDIO\FUNC_01&VEN_10EC*"
-@echo.
-@IF "%SAFEBOOT_OPTION%"=="" (
 @devcon /r disable =SoftwareComponent "SWC\VEN_10EC&AID_0001"
 @echo.
 )
@@ -75,6 +69,12 @@
 @echo.
 )
 @devcon /r remove =SoftwareComponent "SWC\VEN_10EC&SID_0001"
+@echo.
+@IF "%SAFEBOOT_OPTION%"=="" (
+@devcon /r disable =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*" "INTELAUDIO\FUNC_01&VEN_10EC*"
+@echo.
+)
+@devcon /r remove =MEDIA "HDAUDIO\FUNC_01&VEN_10EC*" "INTELAUDIO\FUNC_01&VEN_10EC*"
 @echo.
 @echo Removing generic Realtek UAD components...
 @echo.
