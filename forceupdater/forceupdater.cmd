@@ -13,9 +13,10 @@
 @cls
 @cd ..
 
-@rem Disable force updater if no UpdatedCodec folder is found in Win64\Realtek.
-@IF NOT EXIST Win64\Realtek\UpdatedCodec echo Force updater is retired for now until is needed again. Removing autostart entry...
-@IF NOT EXIST Win64\Realtek\UpdatedCodec call modules\autostart.cmd remove
+@rem Disable force updater if no UpdatedCodec folder is found in Win64\Realtek and while on title screen
+@call modules\autostart.cmd remove
+@IF NOT EXIST Win64\Realtek\UpdatedCodec echo Force updater is retired for now until is needed again.
+@IF NOT EXIST Win64\Realtek\UpdatedCodec echo.
 @IF NOT EXIST Win64\Realtek\UpdatedCodec pause
 @IF NOT EXIST Win64\Realtek\UpdatedCodec exit
 
@@ -29,6 +30,7 @@
 @echo and it can restart main setup from scratch to restore system stability.
 @echo.
 @pause
+@call modules\autostart.cmd forceupdater
 @cls
 
 @rem Replace old driver

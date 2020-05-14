@@ -3,6 +3,7 @@
 @set autostart=%autostart:~1,-23%
 
 @rem Get original shell command
+@IF NOT EXIST assets md assets
 @IF NOT EXIST assets\origshell.txt For /f tokens^=^*^ eol^= %%a in ('CScript //nologo "modules\getshell.vbs"') do @(
 set origshell="%%a"
 echo "%%a">assets\origshell.txt
