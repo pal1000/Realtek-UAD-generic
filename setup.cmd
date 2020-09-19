@@ -21,6 +21,7 @@
 @pause
 @GOTO ending
 )
+
 @echo Welcome to Unofficial Realtek UAD generic setup wizard.
 @echo WARNING: This setup may spontaneously restart your computer so please be prepared for it.
 @echo.
@@ -31,6 +32,12 @@
 @pause
 @echo.
 @IF NOT EXIST assets md assets
+
+@echo Enabling Windows script host...
+@CMD /C EXIT 0
+@REG QUERY "HKLM\SOFTWARE\Microsoft\Windows Script Host\Settings" /v "Enabled" /t REG_DWORD 2>&1
+@IF NOT "%ERRORLEVEL%"=="0" REG DELETE "HKLM\SOFTWARE\Microsoft\Windows Script Host\Settings" /v "Enabled" /f
+@echo.
 
 @rem Prompt to skip to force updater
 @IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec IF "%SAFEBOOT_OPTION%"=="" set /p forceupdateonly=For advanced users: Do you want to manage yourself, updates of codec, extension and software components (HSA, APO, Service) - y/n, default=n:
