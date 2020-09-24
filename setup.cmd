@@ -36,7 +36,7 @@
 @echo Enabling Windows script host...
 @CMD /C EXIT 0
 @REG QUERY "HKLM\SOFTWARE\Microsoft\Windows Script Host\Settings" /v "Enabled" /t REG_DWORD >nul 2>&1
-@IF NOT "%ERRORLEVEL%"=="0" REG DELETE "HKLM\SOFTWARE\Microsoft\Windows Script Host\Settings" /v "Enabled" /f
+@IF "%ERRORLEVEL%"=="0" REG DELETE "HKLM\SOFTWARE\Microsoft\Windows Script Host\Settings" /v "Enabled" /f
 @echo.
 
 @rem Prompt to skip to force updater
