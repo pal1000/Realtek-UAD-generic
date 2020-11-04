@@ -7,7 +7,7 @@ Before installing my package you have to completely remove other Realtek HD Audi
 
 3a. if there is an entry in `Programs and Features` / `Apps & Features` put in there by Realtek official setup, use it to uninstall, but don't restart yet when prompted, minimize it as you'll be back to it later;
 
-3b. if there is no such entry, run setup from my generic package until it asks to install the generic driver, answear with no as it's too early for it;
+3b. if there is no such entry, run setup from my generic package until it asks to install the generic driver, answer with no as it's too early for it;
 
 4. on start search for `Services` and open it as admin;
 5. locate `Windows Audio` making sure it matches exactly, then do stop command on it;
