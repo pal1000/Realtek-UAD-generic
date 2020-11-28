@@ -1,0 +1,13 @@
+[INFORMATION]
+Projects=Octavia_CFS;Citigo_CFS;Superb_CFS;
+OSs=Windows 10 All X64;
+WHQL=Y,
+ProviderFullName=Realtek
+SelectedDriverType=Driver Utility
+Installer=
+Parameters=
+InfFiles=
+DriverUtilityInstaller=
+DriverUtilityParameters=
+UWPSourceFolder=%RELATIVE_PATH%
+UWPInstaller=Install_UWP.cmd

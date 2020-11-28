@@ -1,0 +1,1 @@
+If you want to add the UWP "Realtek Audio Console" offline, please run "Install_UWP.cmd" in the "Audio_Console_Realtek_1.2.169.0_W10x64"
