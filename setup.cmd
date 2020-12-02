@@ -49,7 +49,7 @@
 @echo Creating setup autostart entry...
 @call modules\autostart.cmd setup
 
-@rem Get initial Windows pending file opertions status
+@rem Get initial Windows pending file operations status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\prvregdmp.txt 2>&1
 
 @echo Begin uninstalling Realtek UAD driver...
@@ -127,7 +127,7 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @echo Removing autostart entry in case installation is rejected...
 @call modules\autostart.cmd remove
 @IF NOT "%SAFEBOOT_OPTION%"=="" IF EXIST assets\mainsetupsystemcrash.ini (
-@echo WARNING: Windows crashed during main setup driver initiallization phase.
+@echo WARNING: Windows crashed during the main setup driver initialization phase.
 @echo UAD driver installation is canceled.
 @echo.
 @pause
@@ -176,7 +176,7 @@ call modules\deluadcomponent.cmd !oemcomponent!
 )
 
 @rem Check if reboot is required
-@rem Get final Windows pending file opertions status
+@rem Get final Windows pending file operations status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\postregdmp.txt 2>&1
 @FC /B assets\prvregdmp.txt assets\postregdmp.txt>NUL&&GOTO forceupdater
 @IF EXIST assets\prvregdmp.txt del assets\prvregdmp.txt
