@@ -13,7 +13,7 @@
 @cls
 @cd ..
 
-@rem Disable force updater if no UpdatedCodec folder is found in Win64\Realtek and while on title screen
+@rem Disable force updater if no UpdatedCodec folder is found in Win64\Realtek and while on the title screen
 @call modules\autostart.cmd remove
 @IF NOT EXIST Win64\Realtek\UpdatedCodec echo Force updater is retired for now until is needed again.
 @IF NOT EXIST Win64\Realtek\UpdatedCodec echo.
@@ -21,13 +21,13 @@
 @IF NOT EXIST Win64\Realtek\UpdatedCodec exit
 
 @echo This tool will attempt to forcefully update Realtek UAD generic driver codec core component by replacing
-@echo older driver files with newer version. It is intended to run only after performing a driver update with main setup.
+@echo older driver files with a newer version. It is intended to run only after performing a driver update with the main setup.
 @echo WARNING: This tool may spontaneously restart your computer so please be prepared for it.
 @echo.
 @echo If Windows crashes (BSOD/GSOD), please boot into safe mode as soon as possible.
-@echo Don't use Safe Mode with Command Prompt as it doesn't load shell which is required to autostart even in Safe mode.
+@echo Don't use Safe Mode with Command Prompt as it doesn't load the shell which is required to autostart even in Safe mode.
 @echo Force updater makes going into safe mode very easy
-@echo and it can restart main setup from scratch to restore system stability.
+@echo and it can restart the main setup from scratch to restore system stability.
 @echo.
 @pause
 @call modules\autostart.cmd forceupdater
@@ -67,7 +67,7 @@
 @echo Enabling Windows advanced startup recovery menu in case something goes very wrong...
 @bcdedit /set {globalsettings} advancedoptions true
 @echo.
-@rem Create a flag for main setup to do a postinstall cleanup if Windows reboots normally here
+@rem Create a flag for the main setup to do a post-install cleanup if Windows reboots normally here
 @echo 1>assets\setupdone.ini
 @rem Wait 1 second to write setup configuration to disk before taking the risk of starting the driver.
 @CHOICE /N /T 1 /C y /D y >nul 2>&1
