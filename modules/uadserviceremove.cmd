@@ -5,7 +5,7 @@ REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "%%a" /f
 echo.
 )
 
-@rem Reduce performance penalty of misbehaving security products on vbscript by caching and reusing execution results.
+@rem Reduce the performance penalty of misbehaving security products on VBScript by caching and reusing execution results.
 @IF EXIST assets\uadservices.txt del assets\uadservices.txt
 @For /f tokens^=^*^ eol^= %%a in ('CScript //nologo "modules\finduadservices.vbs" %1') do @echo %%a>>assets\uadservices.txt
 @IF EXIST assets\uadservices.txt IF "%SAFEBOOT_OPTION%"=="" For /f tokens^=^*^ eol^= %%a in (assets\uadservices.txt) do @(
