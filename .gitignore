@@ -8,15 +8,22 @@
 *.bin
 *.inx
 *.isn
+
 # Driver folders
 *.inf
 *.cat
 *.DAT
 *.sys
+
 # Realtek Audio Control offline bundle
-/*RtkUWP*/
+*.Appx
+*.AppxBundle
+*.EAppxBundle
+*.BlockMap
+
 # BSOD / GSOD recovery tutorial and patches
 *.txt
+
 # Temporary files
 tmpFile
 tmpFile2
