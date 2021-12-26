@@ -20,6 +20,8 @@
 *.AppxBundle
 *.EAppxBundle
 *.BlockMap
+*.provxml
+*.xml
 
 # BSOD / GSOD recovery tutorial and patches
 *.txt
