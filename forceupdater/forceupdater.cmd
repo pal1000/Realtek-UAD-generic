@@ -60,7 +60,7 @@
 @set advrunworkdir=%advrunworkdir:~0,-13%
 @rem AdvancedRun.exe /WaitProcess 1 /EXEFilename "%windir%\System32\cmd.exe" /CommandLine "/C forceupdater\defeatpnplock.cmd" /StartDirectory "%advrunworkdir%" /RunAs 4
 @nircmd.exe elevatecmd runassystem %windir%\System32\cmd.exe /c "%advrunworkdir%\forceupdater\defeatpnplock.cmd"
-@echo Done.
+@pause
 @echo.
 @IF EXIST patches\*.* echo Applying registry patch...
 @IF EXIST patches\*.* echo.
