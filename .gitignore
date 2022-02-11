@@ -1,4 +1,4 @@
-# Devcon tool and official setup
+# Binary tools and official setup
 *.exe
 *.ini
 *.dll
@@ -8,6 +8,9 @@
 *.bin
 *.inx
 *.isn
+
+# Binary configuration files
+AdvancedRun.cfg
 
 # Driver folders
 *.inf
