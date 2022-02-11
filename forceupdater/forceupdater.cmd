@@ -38,8 +38,11 @@
 @where /q devcon.exe
 @if NOT "%ERRORLEVEL%"=="0" echo Windows Device console - devcon.exe is required.&pause&exit
 @CMD /C EXIT 0
-@where /q AdvancedRun.exe
-@if NOT "%ERRORLEVEL%"=="0" echo NirSoft AdvancedRun is required.&pause&exit
+@where /q nircmd.exe
+@if NOT "%ERRORLEVEL%"=="0" echo NirSoft CMD is required.&pause&exit
+@CMD /C EXIT 0
+@where /q nircmdc.exe
+@if NOT "%ERRORLEVEL%"=="0" echo NirSoft CMD is required.&pause&exit
 @echo Stopping Windows Audio service to reduce reboot likelihood...
 @echo.
 @net stop Audiosrv /y
@@ -55,7 +58,8 @@
 @IF %advrunworkdir:~0,1%%advrunworkdir:~-1%=="" set advrunworkdir=%advrunworkdir:~1,-1%
 @IF "%advrunworkdir:~-1%"=="\" set advrunworkdir=%advrunworkdir:~0,-1%
 @set advrunworkdir=%advrunworkdir:~0,-13%
-@AdvancedRun.exe /WaitProcess 1 /EXEFilename "%windir%\System32\cmd.exe" /CommandLine "/C forceupdater\defeatpnplock.cmd" /StartDirectory "%advrunworkdir%" /RunAs 4
+@rem AdvancedRun.exe /WaitProcess 1 /EXEFilename "%windir%\System32\cmd.exe" /CommandLine "/C forceupdater\defeatpnplock.cmd" /StartDirectory "%advrunworkdir%" /RunAs 4
+@nircmd.exe elevatecmd runassystem %windir%\System32\cmd.exe /c "%advrunworkdir%\forceupdater\defeatpnplock.cmd"
 @echo Done.
 @echo.
 @IF EXIST patches\*.* echo Applying registry patch...
