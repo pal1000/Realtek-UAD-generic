@@ -1,2 +1,2 @@
-@powershell -NoLogo -Command "Add-AppxPackage -Path *.AppxBundle"
+@powershell -NoLogo -Command "Add-AppxPackage -Path *.Appx*"
 @pause
