@@ -37,5 +37,6 @@
 
 @rem Generate autostart commands
 @IF %1==setup REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "%origshell%,cmd /C call \"%autostart%\setup.cmd\"" /f
+@IF %1==forceupdater REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "%origshell%,cmd /C call \"%autostart%\forceupdater\forceupdater.cmd\"" /f
 @IF %1==remove REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /t REG_SZ /v Shell /d "%origshell%" /f
 @echo.
