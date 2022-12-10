@@ -11,17 +11,6 @@
 @TITLE Realtek UAD generic driver setup
 @IF NOT "%SAFEBOOT_OPTION%"=="" TITLE Realtek UAD generic driver setup (safe mode recovery)
 
-@rem Just wipe autostart entry if force updater reboots Windows to normal mode when enabling sound card.
-@IF "%SAFEBOOT_OPTION%"=="" IF EXIST assets\setupdone.ini (
-@echo Installation completed successfully.
-@echo.
-@echo Reverting Windows to normal startup...
-@bcdedit /deletevalue {globalsettings} advancedoptions
-@echo.
-@pause
-@GOTO ending
-)
-
 @echo Welcome to Unofficial Realtek UAD generic setup wizard.
 @echo WARNING: This setup may spontaneously restart your computer so please be prepared for it.
 @echo.
@@ -134,6 +123,14 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @call modules\autostart.cmd setup
 @pnputil /add-driver *.inf /subdirs /reboot
 @echo.
+@IF EXIST forceupdater\forceupdater.cmd IF EXIST "Win64\Realtek\UpdatedCodec\" IF NOT "%SAFEBOOT_OPTION%"=="" (
+@echo WARNING: You are in safe mode. Force updater won't run to update driver beyond latest WHQL generic base.
+@echo.
+)
+@IF EXIST forceupdater\forceupdater.cmd IF EXIST "Win64\Realtek\UpdatedCodec\" IF "%SAFEBOOT_OPTION%"=="" (
+@pause
+@call forceupdater\forceupdater.cmd
+)
 @echo Done installing driver
 @echo.
 @pause
@@ -158,20 +155,12 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @bcdedit /deletevalue {globalsettings} advancedoptions
 @echo.
 @del assets\mainsetupsystemcrash.ini
-@rem Force updater doesn't run in safe mode
-@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec echo Creating force updater autostart entry...
-@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec call modules\autostart.cmd forceupdater
-)
-
-@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec IF NOT "%SAFEBOOT_OPTION%"=="" (
-@echo WARNING: You are in safe mode. Force updater won't run to update driver beyond latest WHQL generic base.
-@echo.
 )
 
 @rem Check if reboot is required
 @rem Get final Windows pending file operations status
 @REG QUERY "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v PendingFileRenameOperations>assets\postregdmp.txt 2>&1
-@FC /B assets\prvregdmp.txt assets\postregdmp.txt>NUL&&GOTO forceupdater
+@FC /B assets\prvregdmp.txt assets\postregdmp.txt>NUL&&GOTO cleanassets
 @IF EXIST assets\prvregdmp.txt del assets\prvregdmp.txt
 @IF EXIST assets\postregdmp.txt del assets\postregdmp.txt
 @echo Attention! It is necessary to restart your computer to finish driver installation. Save your work before continuing.
@@ -180,13 +169,11 @@ call modules\deluadcomponent.cmd !oemcomponent!
 @shutdown -r -t 0
 @exit
 
-:forceupdater
+:cleanassets
 @IF EXIST assets\prvregdmp.txt del assets\prvregdmp.txt
 @IF EXIST assets\postregdmp.txt del assets\postregdmp.txt
-@pause
-@rem Force updater doesn't run in safe mode
-@IF EXIST forceupdater\forceupdater.cmd IF EXIST Win64\Realtek\UpdatedCodec IF "%SAFEBOOT_OPTION%"=="" call forceupdater\forceupdater.cmd
 
 :ending
 @call modules\autostart.cmd remove >nul 2>&1
-@IF EXIST assets RD /S /Q assets
+@IF EXIST "assets\" RD /S /Q assets
+@pause
