@@ -62,6 +62,12 @@
 @where /q devcon
 @if NOT "%ERRORLEVEL%"=="0" echo Windows Device console - devcon.exe is required.&echo.&pause&GOTO ending
 @IF "%SAFEBOOT_OPTION%"=="" (
+@devcon /r disable =AudioProcessingObject "SWC\VEN_10EC&AID_0001"
+@echo.
+)
+@devcon /r remove =AudioProcessingObject "SWC\VEN_10EC&AID_0001"
+@echo.
+@IF "%SAFEBOOT_OPTION%"=="" (
 @devcon /r disable =SoftwareComponent "SWC\VEN_10EC&AID_0001"
 @echo.
 )
