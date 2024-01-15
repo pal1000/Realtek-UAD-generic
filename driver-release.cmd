@@ -1,4 +1,5 @@
 @set fatal_error=0
+@set exclude=-x^!.git -x^!patches -x^!RTKUWP -x^!.gitattributes -x^!.gitignore -x^!"%~nx0"
 @CD /d "%~dp0"
 @echo ---------------------------------
 @echo Realtek UAD generic release maker
@@ -14,9 +15,10 @@
 @where /q nircmdc.exe
 @if NOT "%ERRORLEVEL%"=="0" set nircmd_warn=1
 @IF %nircmd_warn% EQU 1 echo WARNING^: Force updater requires NirCMD tool from Nirsoft. Extract it in same folder as driver-release.cmd.
+@IF %nircmd_warn% EQU 1 set exclude=%exclude% -x^!forceupdater
 @IF %nircmd_warn% EQU 0 echo OK.
 @echo.
-@endlocal
+@endlocal&set exclude=%exclude%
 
 @setlocal
 @echo Checking Device Manager commandline tool availability...
@@ -77,7 +79,7 @@
 @set /p drvver=Enter driverr version:
 @echo.
 @echo Starting driver release maker...
-@%sevenzip% a ..\Unofficial-Realtek-UAD-generic-%drvver%.7z .\ -x!.git -x!patches -x!RTKUWP -x!.gitattributes -x!.gitignore -x!"%~xn0" -m0=LZMA2 -mmt=on -mx=9
+@%sevenzip% a ..\Unofficial-Realtek-UAD-generic-%drvver%.7z .\ %exclude% -m0=LZMA2 -mmt=on -mx=9
 @echo.
 
 :finish
