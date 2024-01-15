@@ -1,10 +1,17 @@
 @set fatal_error=0
-@set exclude=-x^!.git -x^!patches -x^!RTKUWP -x^!.gitattributes -x^!.gitignore -x^!"%~nx0"
+@set exclude=-x^!.git -x^!RTKUWP -x^!.gitattributes -x^!.gitignore -x^!"%~nx0"
 @CD /d "%~dp0"
 @echo ---------------------------------
 @echo Realtek UAD generic release maker
 @echo ---------------------------------
 @echo.
+
+@setlocal
+@set patchescounter=0
+@if EXIST "patches\" for /f delims^=^ eol^= %%a IN ('dir /B /S patches^\ 2^>nul') DO @set /a patchescounter+=1
+@if EXIST "patches\" IF %patchescounter% EQU 0 set exclude=%exclude% -x^!patches
+@endlocal&set exclude=%exclude%
+
 @setlocal
 @echo Checking force updater agent availability...
 @set nircmd_warn=0
