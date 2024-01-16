@@ -86,7 +86,7 @@
 @set /p drvver=Enter driverr version:
 @echo.
 @echo Starting driver release maker...
-@%sevenzip% a ..\Unofficial-Realtek-UAD-generic-%drvver%.7z .\ %exclude% -m0=LZMA2 -mmt=on -mx=9
+@%sevenzip% a ..\Unofficial-Realtek-UAD-generic-%drvver%.7z "%~dp0" -r %exclude% -m0=LZMA2 -mmt=on -mx=9
 @echo.
 
 :finish
