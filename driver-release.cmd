@@ -1,5 +1,5 @@
 @set fatal_error=0
-@set exclude=-x^!.git -x^!RTKUWP -x^!.gitattributes -x^!.gitignore -x^!"%~nx0"
+@set exclude=-x^!.git -x^!RTKUWP -x^!VCLibs_UWP_Preview -x^!.gitattributes -x^!.gitignore -x^!"%~nx0"
 @CD /d "%~dp0"
 @echo ---------------------------------
 @echo Realtek UAD generic release maker
