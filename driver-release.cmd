@@ -15,12 +15,8 @@
 @setlocal
 @echo Checking force updater agent availability...
 @set nircmd_warn=0
-@CMD /C EXIT 0
-@where /q nircmd.exe
-@if NOT "%ERRORLEVEL%"=="0" set nircmd_warn=1
-@CMD /C EXIT 0
-@where /q nircmdc.exe
-@if NOT "%ERRORLEVEL%"=="0" set nircmd_warn=1
+@if NOT EXIST nircmd.exe set nircmd_warn=1
+@if NOT EXIST nircmdc.exe set nircmd_warn=1
 @IF %nircmd_warn% EQU 1 echo WARNING^: Force updater requires NirCMD tool from Nirsoft. Extract it in same folder as driver-release.cmd.
 @IF %nircmd_warn% EQU 1 set exclude=%exclude% -x^!forceupdater
 @IF %nircmd_warn% EQU 0 echo OK.
@@ -29,12 +25,8 @@
 
 @setlocal
 @echo Checking Device Manager commandline tool availability...
-@CMD /C EXIT 0
-@where /q devcon.exe
-@if NOT "%ERRORLEVEL%"=="0" (
-@echo FATAL ERROR^: Device Manager commandline tool is missing. You can obtain it by installing Windows driver kit then copying devcon.exe from %ProgramFiles% ^(x86^)^\Windows Kits^\10^\Tools^\^<version^>^\x64 to same folder as driver-release.cmd.
-@set fatal_error=1
-)
+@if NOT EXIST devcon.exe echo FATAL ERROR^: Device Manager commandline tool is missing. You can obtain it by installing Windows driver kit then copying devcon.exe from %ProgramFiles% ^(x86^)^\Windows Kits^\10^\Tools^\^<version^>^\x64 to same folder as driver-release.cmd.
+@if NOT EXIST devcon.exe set fatal_error=1
 @if %fatal_error% EQU 0 echo OK.
 @echo.
 @endlocal&set fatal_error=%fatal_error%
