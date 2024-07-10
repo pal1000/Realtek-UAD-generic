@@ -75,7 +75,7 @@
 
 @IF %fatal_error% EQU 1 GOTO finish
 
-@set /p drvver=Enter driverr version:
+@set /p drvver=Enter driver version:
 @echo.
 @echo Starting driver release maker...
 @%sevenzip% a ..\Unofficial-Realtek-UAD-generic-%drvver%.7z "%~dp0" -r %exclude% -m0=LZMA2 -mmt=on -mx=9
