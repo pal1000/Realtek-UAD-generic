@@ -1,3 +1,4 @@
+:begin
 @set fatal_error=0
 @set exclude=-x^!.git -x^!RTKUWP -x^!VCLibs_UWP_Preview -x^!.gitattributes -x^!.gitignore -x^!"%~nx0"
 @CD /d "%~dp0"
@@ -75,11 +76,16 @@
 
 @IF %fatal_error% EQU 1 GOTO finish
 
+@setlocal
 @set /p drvver=Enter driver version:
 @echo.
 @echo Starting driver release maker...
 @%sevenzip% a ..\Unofficial-Realtek-UAD-generic-%drvver%.7z "%~dp0" -r %exclude% -m0=LZMA2 -mmt=on -mx=9
 @echo.
+@set /p startover=Start over (y/n):
+@echo.
+@IF /I "%startover%"=="y" cls
+@IF /I "%startover%"=="y" GOTO begin
 
 :finish
 @pause
