@@ -22,7 +22,7 @@ set /a loopcount+=1
 set /a scandrvpos+=1
 set drvval=%%b
 IF !scandrvpos! EQU !pubdrvpos! echo Removing Realtek UAD component %1 instance #!loopcount!...
-IF !scandrvpos! EQU !pubdrvpos! pnputil /delete-driver !drvval: =! /force /reboot /uninstall
+IF !scandrvpos! EQU !pubdrvpos! pnputil /delete-driver !drvval: =! /force /norestart /uninstall
 IF !scandrvpos! EQU !pubdrvpos! echo.
 )
 @IF NOT !pubdrvpos! EQU -1 GOTO delcmploop
